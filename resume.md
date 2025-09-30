@@ -53,14 +53,6 @@ Passionate cybersecurity researcher and penetration tester. Experienced in web a
 
 ---
 
-## 📊 Experience Stats
-- **5+ Years** — Training & Competitions
-- **50+ Projects / Exercises**
-- **10+ AWS / Cloud Tools**
-- **3+ Programming Languages**
-
----
-
 ## 🚀 Featured Projects
 - **Acadhut** — Educational social media platform (MERN + AWS) with secure deployment.
 - **MessageMate** — Real-time chat app with Socket.io; focused on secure messaging.

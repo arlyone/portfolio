@@ -1,0 +1,2 @@
+# Disallow: /interrogation.html /assets/images/cat_detective.jpg
+# Hint: Analyze the image file. 

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🕵️ The Final Interrogation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600&display=swap');
+    body {
+      font-family: 'Fira Code', 'Inter', monospace;
+      background: radial-gradient(circle at 20% 30%, #000814 0%, #02030a 100%);
+      color: #e9fbf0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .wrap {
+      background: rgba(10, 18, 35, 0.92);
+      border-radius: 12px;
+      padding: 32px 38px;
+      width: min(90%, 480px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 40px rgba(124, 58, 237, 0.25);
+      animation: fadeIn 1s ease-out;
+      text-align: center;
+    }
+
+    h2 {
+      color: #7ef29b;
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #9fb3c8;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
+      color: #eaffef;
+      width: 70%;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      transition: 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #7ef29b;
+      box-shadow: 0 0 8px rgba(126, 242, 155, 0.3);
+    }
+
+    button {
+      padding: 10px 14px;
+      margin-left: 10px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #7c3aed, #5b21b6);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+      box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+    }
+
+    #result {
+      margin-top: 18px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: #7ef29b;
+      transition: 0.3s ease;
+    }
+
+    footer {
+      margin-top: 20px;
+      color: #607d8b;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h2>🕵️ The Final Interrogation</h2>
+    <p>
+      The suspect won’t give up the password easily.<br>
+      Remove all spaces from the phrase you found… then reverse it.
+    </p>
+    <div style="display:flex;justify-content:center;align-items:center;">
+      <input id="pwd" placeholder="Enter reversed password">
+      <button id="go">Unlock</button>
+    </div>
+    <div id="result"></div>
+    <footer>Case File #007</footer>
+  </div>
+
+  <script src="detective-clue.js"></script>
+  <script>
+    document.getElementById('go').addEventListener('click', verify);
+    document.getElementById('pwd').addEventListener('keydown', (e) => { if (e.key === 'Enter') verify(); });
+
+    function verify() {
+      const attempt = document.getElementById('pwd').value.trim();
+      const result = document.getElementById('result');
+
+      if (typeof STAGE1_FLAG === 'undefined') {
+        result.style.color = '#f2a6a6';
+        result.textContent = '⚠️ Clue data not loaded.';
+        return;
+      }
+
+      const core = STAGE1_FLAG.replace(/\s+/g, '');
+      const derived = core.split('').reverse().join('');
+
+      if (attempt === derived) {
+        result.style.color = '#7ef29b';
+        result.innerHTML = '🐈 Case closed — Final message:<br><strong>kiki is cute.</strong>';
+      } else {
+        result.style.color = '#f2a6a6';
+        result.textContent = '❌ Incorrect password. Keep thinking, detective.';
+      }
+    }
+  </script>
+</body>
+</html>

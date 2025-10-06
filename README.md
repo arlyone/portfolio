@@ -1,6 +1,7 @@
+```markdown
 # Arun Bhandari — Pentester & Cybersecurity Researcher
 
-👨‍💻 **Alias:** Arlyone  
+👨‍💻 **Alias:** Arly 
 📍 **Location:** Melbourne, Australia  
 📧 **Email:** itsarlyone@gmail.com  
 🌐 **Portfolio:** [arly.one](https://arly.one)  
@@ -53,16 +54,15 @@ Passionate cybersecurity researcher and penetration tester. Experienced in web a
 ---
 
 ## 🚀 Featured Projects
-- **Acadhut** — Educational social media platform (MERN + AWS) with secure deployment.
-- **MessageMate** — Real-time chat app with Socket.io; focused on secure messaging.
-- **NetworkNest** — Social network with privacy controls and secure file handling.
+- **Flipper** — 'Jarvis-like' interactive assistant with hacking abilities. 
+- **Lightc0der** — Bug bounty OS ready tools. 
 
 ---
 
 ## 🔐 Bug Bounty & Competitions
-- **25+ Vulnerabilities Reported** — via HackerOne, Bugcrowd, and VDPs.
+- **20+ Vulnerabilities Reported** — via HackerOne, Bugcrowd, and VDPs.
 - **WSA Regionals Comp 2020** — Selected for Red/Blue Team (IXIA / Keysight).
-- **Acknowledgements:** Flex Dapps, Facebook, Intel, Zapier, PayPal.
+- **Acknowledgements:** Flex Dapps, Facebook, Intel, Zapier, Department of Home Affairs Australia
 
 ---
 
@@ -83,8 +83,9 @@ Passionate cybersecurity researcher and penetration tester. Experienced in web a
 📧 **Email:** itsarlyone@gmail.com  
 🌐 **Portfolio:** [arly.one](https://arly.one)  
 🐙 **GitHub:** [ArunBhandarii](https://github.com/arlyone)  
-💼 **LinkedIn:** [Arun Bhandari](https://www.linkedin.com/in/arlyone/)
+💼 **LinkedIn:** [Arun Bhandari](https://www.linkedin.com/in/itsarly/)
 
 ---
 
 © 2025 Arun Bhandari
+```

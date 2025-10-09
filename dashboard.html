@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detective Dashboard | Arlyverse</title>
+  <meta name="description" content="CTF Detective Dashboard - Track your progress and clues in Arlyone's universe" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: #121212;
+      color: #f5f5f5;
+      font-family: 'Inter', sans-serif;
+    }
+    .card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 20px;
+      transition: 0.3s;
+    }
+    .card:hover {
+      box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+      transform: translateY(-4px);
+    }
+    .btn {
+      background: #7c3aed;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .btn:hover { background: #6d28d9; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-center p-6">
+  
+  <div class="max-w-3xl">
+    <h1 class="text-4xl font-extrabold mb-4 text-purple-400">🕵️ Detective Dashboard</h1>
+    <p class="text-gray-400 mb-8">Welcome back, agent. Track your progress, see clues you've found, and monitor your journey through the Arlyverse.</p>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-10">
+      <div class="card">
+        <h3 class="text-xl font-bold mb-2 text-purple-300"><i class="fa-solid fa-key"></i> Clues Found</h3>
+        <p id="clueCount" class="text-2xl font-extrabold text-purple-400">0</p>
+      </div>
+
+      <div class="card">
+        <h3 class="text-xl font-bold mb-2 text-purple-300"><i class="fa-solid fa-paw"></i> Pawprints</h3>
+        <p id="pawprints" class="text-2xl font-extrabold text-purple-400">0</p>
+      </div>
+
+      <div class="card">
+        <h3 class="text-xl font-bold mb-2 text-purple-300"><i class="fa-solid fa-flag-checkered"></i> Status</h3>
+        <p id="status" class="text-2xl font-extrabold text-green-400">Rookie</p>
+      </div>
+    </div>
+
+    <div id="clueList" class="grid gap-4 mb-10"></div>
+
+    <div class="flex flex-col md:flex-row justify-center gap-4">
+      <a href="detective.html" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Start the Hunt</a>
+      <a href="interrogation.html" class="btn"><i class="fa-solid fa-lock-open"></i> Final Interrogation</a>
+      <a href="index.html" class="btn"><i class="fa-solid fa-home"></i> Back to Portfolio</a>
+    </div>
+  </div>
+
+  <footer class="mt-10 text-gray-500 text-sm">
+    <p>&copy; 2025 Arlyone — Keep chasing the truth 🕶️</p>
+  </footer>
+
+  <script>
+    function updateDashboard() {
+      const clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
+      const clueCount = clues.length;
+      const pawprints = clueCount * 3;
+
+      document.getElementById('clueCount').textContent = clueCount;
+      document.getElementById('pawprints').textContent = pawprints;
+
+      // Status rank logic
+      const statusText = clueCount >= 5 ? 'Master Detective' :
+                         clueCount >= 3 ? 'Field Agent' : 'Rookie';
+      document.getElementById('status').textContent = statusText;
+
+      // Display clues
+      const clueList = document.getElementById('clueList');
+      clueList.innerHTML = '';
+
+      if (clueCount > 0) {
+        clues.forEach((num) => {
+          const el = document.createElement('div');
+          el.className = 'card text-left';
+          el.innerHTML = `<strong class="text-purple-400">Clue #${num}</strong> — Retrieved successfully.`;
+          clueList.appendChild(el);
+        });
+      } else {
+        clueList.innerHTML = '<p class="text-gray-400">No clues yet — start your investigation!</p>';
+      }
+    }
+
+    // Initial load
+    updateDashboard();
+
+    // Live updates across tabs
+    window.addEventListener('storage', updateDashboard);
+
+    // Auto-refresh every second (to catch local changes)
+    setInterval(updateDashboard, 1000);
+
+    // Refresh when coming back to tab
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) updateDashboard();
+    });
+  </script>
+</body>
+</html>

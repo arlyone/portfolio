@@ -10,7 +10,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* ===== Base Styling ===== */
     body {
       background: #121212;
       color: #f5f5f5;
@@ -46,7 +45,7 @@
       margin-top: 40px;
     }
 
-    /* ===== Dark Mode Cards ===== */
+    /* Dark Mode Cards */
     .stat, .skill-card { background: #202020; }
     .stat-number {
       font-size: 2rem;
@@ -59,7 +58,7 @@
     }
     .social-link:hover { color: #7c3aed; }
 
-    /* ===== Light Mode ===== */
+    /* Light Mode */
     body.light-mode { background: #fafafa; color: #222; }
     body.light-mode nav {
       background: #ffffff !important;
@@ -82,7 +81,7 @@
     body.light-mode .social-link { color: #222; }
     body.light-mode .social-link:hover { color: #7c3aed; }
 
-    /* ===== Stats & Skills ===== */
+    /* Stats & Skills */
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -105,7 +104,7 @@
     }
     .skill-icon { font-size: 2rem; color: #7c3aed; margin-bottom: 10px; }
 
-    /* ===== Contact ===== */
+    /* Contact */
     .contact-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -169,7 +168,6 @@
 </head>
 
 <body>
-  <!-- Navbar -->
   <nav class="fixed top-0 w-full bg-[#121212] border-b border-gray-700 z-50">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-2 cursor-pointer" id="siteName">
@@ -191,7 +189,6 @@
     </div>
   </nav>
 
-  <!-- Hero -->
   <section class="container mx-auto px-6 pt-36 text-center">
     <h1 class="text-5xl font-extrabold mb-4">👨‍💻 Hello, I’m <span class="text-purple-400">Arun</span></h1>
     <p class="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -199,7 +196,7 @@
     </p>
     <div class="mt-6">
       <a href="mailto:itsarlyone@gmail.com" class="btn-primary mr-4"><i class="fas fa-envelope"></i> Hire Me</a>
-      <a href="https://docs.google.com/document/d/1HJ18DlZwXvOHDr2QVgXmGXybX9b1V4pK_1Z_FgtmIl0/edit?usp=sharing" target="_blank" class="border border-purple-500 px-6 py-3 rounded-lg hover:bg-purple-600"><i class="fas fa-file"></i> Resume</a>
+      <a href="https://docs.google.com/document/d/1hy8y0RUVLUmVKrILooMPO2WmgxPPMxGr8-Emu86uTKk/edit?usp=sharing" target="_blank" class="border border-purple-500 px-6 py-3 rounded-lg hover:bg-purple-600"><i class="fas fa-file"></i> Resume</a>
     </div>
   </section>
 
@@ -208,23 +205,40 @@
     <div class="container mx-auto">
       <h2 class="section-title">About Me</h2>
       <p class="text-gray-400 text-lg max-w-3xl mx-auto text-center">
-  Hey, I’m Arun (alias <b>Arly</b>), a cybersecurity enthusiast and developer. I’m into web & network pentesting, system/server administration, digital forensics, Bash & Python scripting, Git, reconnaissance and I’m always up for CTF challenges to level up my skills.
+  Hey, I’m Arun (alias <b>ItsArly</b>), a cybersecurity enthusiast and developer. I’m into web & network pentesting, system/server administration, digital forensics, Bash & Python scripting, Git, reconnaissance and I’m always up for CTF challenges to level up my skills.
 </p>
 
     </div>
   </section>
 
   <!-- Skills -->
-  <section id="skills" class="section bg-[#181818]">
+ <section id="skills" class="section bg-[#181818]">
     <div class="container mx-auto">
-      <h2 class="section-title">Technical Skills</h2>
+     <h2 class="section-title">Technical Skills</h2>
       <p class="section-subtitle">Comprehensive expertise across cybersecurity, cloud computing, and honed through real-world projects and CTF challenges.</p>
 
-      <div class="skills-grid">
-        <div class="skill-card"><div class="skill-icon"><i class="fas fa-shield-alt"></i></div><h3>Penetration Testing</h3><ul><li>Web App Security Testing</li><li>Network Assessment</li><li>Vulnerability Management</li><li>Security Auditing</li><li>OWASP Top 10</li></ul></div>
-        <div class="skill-card"><div class="skill-icon"><i class="fas fa-code"></i></div><h3>Programming</h3><ul><li>Python Automation</li><li>Bash Scripting</li><li>JavaScript & Web</li><li>Git</li></ul></div>
-        <div class="skill-card"><div class="skill-icon"><i class="fas fa-server"></i></div><h3>System Administration</h3><ul><li>Linux & Windows Servers</li><li>Database Management</li><li>VMware</li></ul></div>
-        <div class="skill-card"><div class="skill-icon"><i class="fas fa-lock"></i></div><h3>Cybersecurity</h3><ul><li>Cryptography</li><li>Digital Forensics</li><li>OSINT</li><li>CTFs</li><li>Incident Response</li></ul></div>
+      <div class="divider"></div>
+      <div class="skills-grid mt-8">
+        <div class="skill-card text-center">
+          <div class="skill-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 class="font-semibold mb-2">Penetration Testing</h3>
+          <p class="text-gray-400">Web, Network, and API Security Assessments using OWASP and custom tools.</p>
+        </div>
+        <div class="skill-card text-center">
+          <div class="skill-icon"><i class="fas fa-code"></i></div>
+          <h3 class="font-semibold mb-2">Scripting & Automation</h3>
+          <p class="text-gray-400">Python, Bash, and JavaScript — automating security tasks and workflows.</p>
+        </div>
+        <div class="skill-card text-center">
+          <div class="skill-icon"><i class="fas fa-lock"></i></div>
+          <h3 class="font-semibold mb-2">Cybersecurity Research</h3>
+          <p class="text-gray-400">OSINT, Threat Hunting, Forensics, and Red Team methodologies.</p>
+        </div>
+        <div class="skill-card text-center">
+          <div class="skill-icon"><i class="fas fa-server"></i></div>
+          <h3 class="font-semibold mb-2">System Administration</h3>
+          <p class="text-gray-400">Linux & Windows Server Management, Databases, and Cloud Security.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -240,10 +254,10 @@
           <p class="text-gray-400">A chatbot that performs security testing.</p>
         </a>
 
-        <a href="detective.html" class="detective-card bg-[#181818] p-6 rounded-lg shadow-lg block overflow-hidden">
+        <a href="dashboard.html" class="detective-card bg-[#181818] p-6 rounded-lg shadow-lg block overflow-hidden">
           <span class="ctf-tag">CTF</span>
-          <h3 class="text-2xl font-semibold mb-2">Arly's Detective Hunt</h3>
-          <p class="text-gray-400">A purrfectly playful meowstery.</p>
+          <h3 class="text-2xl font-semibold mb-2">Operation Catnip</h3>
+          <p class="text-gray-400">A purrfectly playful meowstery game.</p>
         </a>
 
         <a href="https://github.com/arlyone/lightCoder" target="_blank" class="detective-card bg-[#181818] p-6 rounded-lg shadow-lg block overflow-hidden">
@@ -290,7 +304,7 @@
           <div class="contact-item"><i class="fas fa-graduation-cap"></i><span>Box Hill Institute - Cyber Security</span></div>
           <div class="social-links">
             <a href="https://twitter.com/itsarlyone" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://linkedin.com/in/itsarly" class="social-link" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://linkedin.com/in/arlyone" class="social-link" target="_blank"><i class="fab fa-linkedin"></i></a>
             <a href="https://github.com/arlyone" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
             <a href="https://www.youtube.com/@Arlyone" class="social-link" target="_blank"><i class="fab fa-youtube"></i></a>
           </div>
@@ -318,7 +332,6 @@
 
   <footer><p>&copy; 2025 Arun Bhandari</p></footer>
 
-  <!-- Scripts -->
   <script>
     document.getElementById('mobileMenu').addEventListener('click', () => {
       document.getElementById('navLinks').classList.toggle('hidden');
@@ -345,4 +358,5 @@
     }
   </script>
 </body>
+<!-- Please Keep an eye on https://arly.live/ for upcoming projects-->
 </html>

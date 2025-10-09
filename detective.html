@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>🔍 Arly’s Looking for a Detective — The Clue Hunt</title>
+  <title>🔍 The Clue Hunt</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fira+Code:wght@400;600&display=swap');
     body {
@@ -25,14 +25,14 @@
       padding: 32px;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 0 40px rgba(92, 51, 255, 0.2);
+      box-shadow: 0 0 40px rgba(92, 51, 255, 0.25);
       animation: fadeIn 1.2s ease-in-out;
+      text-align: center;
     }
 
     h1 {
       color: #7ef29b;
       font-size: 1.8rem;
-      text-align: center;
       margin-bottom: 10px;
       letter-spacing: 0.5px;
     }
@@ -40,7 +40,6 @@
     p {
       color: #9fb3c8;
       line-height: 1.6;
-      text-align: center;
       margin-bottom: 28px;
     }
 
@@ -84,7 +83,6 @@
       margin-top: 14px;
       font-family: 'Fira Code', monospace;
       color: #7ef29b;
-      text-align: center;
       min-height: 20px;
       transition: 0.3s ease;
     }
@@ -92,7 +90,6 @@
     .hint {
       margin-top: 20px;
       color: #86a7bf;
-      text-align: center;
       font-size: 0.95rem;
       letter-spacing: 0.3px;
     }
@@ -115,13 +112,6 @@
       transform: scale(1.05);
     }
 
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.8rem;
-      color: #5e768a;
-    }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -130,11 +120,10 @@
 </head>
 <body>
   <div class="box">
-    <h1>🕵️ Arly’s Looking for a Detective — The Clue Hunt</h1>
+    <h1>🕵️ The Clue Hunt</h1>
     <p>
-    <br>
       A quiet puzzle hides somewhere near the cat.<br>
-      No fancy tools required — just patience, curiosity, and keen eyes.
+      No fancy tools required - just patience, curiosity, and keen eyes.
     </p>
 
     <div style="display:flex;justify-content:center;align-items:center;">
@@ -143,26 +132,27 @@
     </div>
 
     <div id="response"></div>
+    <div class="hint">💡 Hint: Even an image can keep a secret - if you know where to look.</div>
 
-    <div class="hint">💡 Hint: Even an image can keep a secret — if you know where to look.</div>
-
-    <div id="stageLinkContainer" style="display:none;text-align:center;">
+    <!-- There's something interesting at secret-key.txt-->
+     
+    <div id="stageLinkContainer" style="display:none;">
       <a href="interrogation.html" class="next">Proceed to The Final Interrogation →</a>
     </div>
   </div>
 
   <script src="pawprints.js"></script>
   <script>
-    const btn = document.getElementById('submitBtn');
-    const resp = document.getElementById('response');
     const input = document.getElementById('key');
+    const resp = document.getElementById('response');
     const next = document.getElementById('stageLinkContainer');
 
-    btn.addEventListener('click', checkFlag);
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkFlag(); });
+    document.getElementById('submitBtn').addEventListener('click', checkFlag);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') checkFlag(); });
 
     function checkFlag() {
       const val = input.value.trim();
+
       if (typeof STAGE1_FLAG === 'undefined') {
         resp.style.color = '#f2a6a6';
         resp.textContent = '⚠️ Missing clue data.';
@@ -171,16 +161,28 @@
 
       if (val === STAGE1_FLAG) {
         resp.style.color = '#7ef29b';
-        resp.textContent = '✅ Nice work, detective. You found the right phrase!';
+        resp.textContent = '✅ Well done, detective. You’ve cracked Stage 1!';
         next.style.display = 'block';
+
+        //  Dashboard Sync 
+        let clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
+        if (!clues.includes(1)) clues.push(1); 
+        localStorage.setItem('ctfClues', JSON.stringify(clues));
+
+        // Also mark main CTF progress
+        const progress = JSON.parse(localStorage.getItem('ctfProgress') || '{}');
+        progress.stage1 = true;
+        localStorage.setItem('ctfProgress', JSON.stringify(progress));
+
+        // Notify other tabs (dashboard) to update
+        localStorage.setItem('ctfUpdate', Date.now());
       } else {
         resp.style.color = '#f2a6a6';
         resp.textContent = '❌ Not quite. Keep investigating...';
       }
     }
   </script>
-
 <!-- A curious clue hides at https://arly.one/assets/images/cat_detective.jpg -->
-<!--  The cat leaves its pawprints in places few inspect.-->
+<!-- The cat leaves its pawprints in places few inspect. -->
 </body>
 </html>

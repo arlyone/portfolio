@@ -6,142 +6,311 @@
   <title>🕵️ The Final Interrogation</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600&display=swap');
+
+    :root{
+      --bg1: #000814;
+      --bg2: #02030a;
+      --panel: rgba(10,18,35,0.94);
+      --accent: #7ef29b;
+      --muted: #9fb3c8;
+      --purple: linear-gradient(90deg,#7c3aed,#5b21b6);
+    }
+
+    html,body { height:100%; }
     body {
       font-family: 'Fira Code', 'Inter', monospace;
-      background: radial-gradient(circle at 20% 30%, #000814 0%, #02030a 100%);
+      background: radial-gradient(circle at 20% 30%, var(--bg1) 0%, var(--bg2) 100%);
       color: #e9fbf0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0;
+      overflow:hidden;
     }
 
     .wrap {
-      background: rgba(10, 18, 35, 0.92);
-      border-radius: 12px;
-      padding: 32px 38px;
-      width: min(90%, 480px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: 0 0 40px rgba(124, 58, 237, 0.25);
-      animation: fadeIn 1s ease-out;
-      text-align: center;
+      background: var(--panel);
+      border-radius:12px;
+      padding:28px 34px;
+      width: min(92%, 550px);
+      border: 1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 8px 36px rgba(92,51,255,0.12);
+      text-align:center;
+      animation: fadeIn .9s ease-out;
     }
 
-    h2 {
-      color: #7ef29b;
-      font-size: 1.6rem;
-      margin-bottom: 12px;
-    }
+    h2 { color: var(--accent); margin:0 0 10px; font-size:1.5rem; }
+    p { color: var(--muted); margin:0 0 18px; line-height:1.45; }
 
-    p {
-      color: #9fb3c8;
-      margin-bottom: 24px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    input {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: rgba(255, 255, 255, 0.05);
-      color: #eaffef;
-      width: 70%;
+    .row { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:6px; }
+    input[type="text"] {
+      padding:10px 12px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+      color:#eaffef;
+      width:68%;
       font-family: 'Fira Code', monospace;
-      font-size: 0.95rem;
-      transition: 0.3s ease;
+      font-size:0.95rem;
     }
-
-    input:focus {
-      outline: none;
-      border-color: #7ef29b;
-      box-shadow: 0 0 8px rgba(126, 242, 155, 0.3);
-    }
+    input[type="text"]:focus { outline:none; box-shadow:0 0 8px rgba(126,242,155,0.14); border-color:var(--accent); }
 
     button {
-      padding: 10px 14px;
-      margin-left: 10px;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #7c3aed, #5b21b6);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.25s ease;
+      padding:10px 14px;
+      border-radius:6px;
+      border:0;
+      background: var(--purple);
+      color:white;
+      font-weight:600;
+      cursor:pointer;
+      transition: transform .15s ease;
+    }
+    button:hover{ transform:scale(1.03); }
+
+    /* Decrypt UI */
+    .decrypt {
+      margin-top:18px;
+      display:none;
+      align-items:center;
+      gap:12px;
+      flex-direction:column;
     }
 
-    button:hover {
-      transform: scale(1.05);
-      background: linear-gradient(90deg, #8b5cf6, #6d28d9);
-      box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+    .status {
+      width:100%;
+      text-align:left;
+      font-family: 'Fira Code', monospace;
+      color: #cfeed8;
+      font-size:0.92rem;
+    }
+
+    .bar {
+      width:100%;
+      height:12px;
+      background: rgba(255,255,255,0.04);
+      border-radius:8px;
+      overflow:hidden;
+      margin-top:8px;
+      box-shadow: inset 0 -3px 6px rgba(0,0,0,0.5);
+    }
+
+    .bar > i {
+      display:block;
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(126,242,155,0.18), rgba(124,58,237,0.22));
+      transition: width 0.35s linear;
+      box-shadow: 0 6px 18px rgba(124,58,237,0.06);
+    }
+
+    .percent {
+      margin-top:6px;
+      font-size:0.85rem;
+      color:#9fb3c8;
+      font-family: 'Fira Code', monospace;
     }
 
     #result {
-      margin-top: 18px;
+      margin-top:16px;
+      min-height:48px;
       font-family: 'Fira Code', monospace;
-      font-size: 0.95rem;
-      color: #7ef29b;
-      transition: 0.3s ease;
+      color: var(--accent);
+      font-size:1rem;
+      transition: opacity .3s ease;
     }
 
-    footer {
+    .monosmall { font-family: 'Fira Code', monospace; color:#9fb3c8; font-size:0.86rem; }
+
+    footer { margin-top:18px; color:#607d8b; font-size:0.8rem; }
+
+    .dash-btn {
+      display: none;
       margin-top: 20px;
-      color: #607d8b;
-      font-size: 0.8rem;
-      text-align: center;
+      background: rgba(126, 242, 155, 0.1);
+      border: 1px solid rgba(126, 242, 155, 0.3);
+      border-radius: 6px;
+      padding: 10px 16px;
+      color: #7ef29b;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+    .dash-btn:hover {
+      background: rgba(126, 242, 155, 0.2);
+      transform: scale(1.05);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform: translateY(14px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+
+    @media (max-width:480px){
+      input[type="text"]{ width:60%; }
+      .wrap{ padding:20px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <h2>🕵️ The Final Interrogation</h2>
-    <p>
-      The suspect won’t give up the password easily.<br>
-      Remove all spaces from the phrase you found… then reverse it.
-    </p>
-    <div style="display:flex;justify-content:center;align-items:center;">
-      <input id="pwd" placeholder="Enter reversed password">
+  <div class="wrap" role="main" aria-labelledby="title">
+    <h2 id="title">🕵️ The Final Interrogation</h2>
+    <p class="monosmall">The suspect won’t give up the password easily.<br>
+      Remove all spaces from the phrase you found… then reverse it.</p>
+
+    <div class="row" aria-hidden="false">
+      <input id="pwd" type="text" placeholder="Enter reversed password" aria-label="reversed password">
       <button id="go">Unlock</button>
     </div>
-    <div id="result"></div>
-    <footer>Case File #007</footer>
+
+    <div class="decrypt" id="decryptUI" aria-hidden="true" aria-live="polite">
+      <div class="status" id="stageText">[idle]</div>
+      <div class="bar" aria-hidden="true"><i id="barFill" style="width:0%"></i></div>
+      <div class="percent" id="percentText">0%</div>
+    </div>
+
+    <div id="result" role="status" aria-live="polite"></div>
+    
+    <a href="system-breach.html" id="dashButton" class="dash-btn">💻 Continue to the Final Operation </a>
+
+    <footer>Case File #007 — keep your eyes sharp.</footer>
   </div>
 
   <script src="pawprints.js"></script>
   <script>
-    document.getElementById('go').addEventListener('click', verify);
-    document.getElementById('pwd').addEventListener('keydown', (e) => { if (e.key === 'Enter') verify(); });
-
-    function verify() {
-      const attempt = document.getElementById('pwd').value.trim();
+    (function(){
+      const go = document.getElementById('go');
+      const input = document.getElementById('pwd');
       const result = document.getElementById('result');
+      const decryptUI = document.getElementById('decryptUI');
+      const stageText = document.getElementById('stageText');
+      const barFill = document.getElementById('barFill');
+      const percentText = document.getElementById('percentText');
+      const dashButton = document.getElementById('dashButton');
 
-      if (typeof STAGE1_FLAG === 'undefined') {
-        result.style.color = '#f2a6a6';
-        result.textContent = '⚠️ Clue data not loaded.';
-        return;
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptUnlock(); });
+      go.addEventListener('click', attemptUnlock);
+
+      function attemptUnlock(){
+        const attempt = input.value.trim();
+        result.textContent = '';
+        if (typeof STAGE1_FLAG === 'undefined'){
+          result.style.color = '#f2a6a6';
+          result.textContent = '⚠️ Clue data not loaded.';
+          return;
+        }
+
+        const core = STAGE1_FLAG.replace(/\s+/g, '');
+        const expected = core.split('').reverse().join('');
+
+        if (attempt !== expected) {
+          result.style.color = '#f2a6a6';
+          result.textContent = '❌ Incorrect password. Keep thinking, detective.';
+          return;
+        }
+
+        startDecryptSequence();
       }
 
-      const core = STAGE1_FLAG.replace(/\s+/g, '');
-      const derived = core.split('').reverse().join('');
+      function startDecryptSequence(){
+        decryptUI.style.display = 'flex';
+        decryptUI.setAttribute('aria-hidden','false');
+        barFill.style.width = '0%';
+        percentText.textContent = '0%';
+        stageText.textContent = '[initializing cryptomodule]';
 
-      if (attempt === derived) {
-        result.style.color = '#7ef29b';
-        result.innerHTML = '🐈 Case closed — Final message:<br><strong>kiki is cute.</strong>';
-      } else {
-        result.style.color = '#f2a6a6';
-        result.textContent = '❌ Incorrect password. Keep thinking, detective.';
+        const stages = [
+          { text:'[initializing cryptomodule]', pct:6,  dur:350 },
+          { text:'[gathering entropy]',         pct:18, dur:500 },
+          { text:'[running deobfuscator]',     pct:36, dur:700 },
+          { text:'[attempting pattern-match]', pct:54, dur:800 },
+          { text:'[brute-forcing weak layers]',pct:74, dur:1000 },
+          { text:'[assembling payload]',       pct:90, dur:600 },
+          { text:'[finalizing output]',        pct:100,dur:400 }
+        ];
+
+        let i=0;
+        function runStage(){
+          if (i>=stages.length) return revealSuccess();
+          const s = stages[i];
+          stageText.textContent = s.text;
+          animateBarTo(s.pct, s.dur, () => {
+            i++;
+            setTimeout(runStage, 60);
+          });
+        }
+        runStage();
       }
-    }
+
+      function animateBarTo(targetPct, duration, cb){
+        const startWidth = parseFloat(barFill.style.width) || 0;
+        const start = performance.now();
+        const end = start + duration;
+        function step(now){
+          const t = Math.min(1, (now - start) / duration);
+          const eased = t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
+          const cur = startWidth + (targetPct - startWidth) * eased;
+          barFill.style.width = cur + '%';
+          percentText.textContent = Math.round(cur) + '%';
+          if (now < end) requestAnimationFrame(step);
+          else {
+            barFill.style.width = targetPct + '%';
+            percentText.textContent = targetPct + '%';
+            if (typeof cb === 'function') cb();
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      function revealSuccess(){
+        stageText.textContent = '[decrypt complete]';
+        percentText.textContent = '100%';
+        setTimeout(() => {
+          const lines = [
+            '🐈 Case closed — Final message:',
+            'kiki is cute. <3'
+          ];
+          typeLines(lines, 30, () => {
+            let clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
+            if (!clues.includes(2)) clues.push(2);
+            localStorage.setItem('ctfClues', JSON.stringify(clues));
+
+            const progress = JSON.parse(localStorage.getItem('ctfProgress') || '{}');
+            progress.stage2 = true;
+            localStorage.setItem('ctfProgress', JSON.stringify(progress));
+
+            localStorage.setItem('ctfUpdate', Date.now());
+
+            result.style.color = '#7ef29b';
+            result.style.opacity = 1;
+
+            dashButton.style.display = 'inline-block'; 
+          });
+        }, 400);
+      }
+
+      function typeLines(lines, charDelay = 35, cb){
+        result.textContent = '';
+        let li = 0, ci = 0;
+        function typeChar(){
+          if (li >= lines.length) {
+            if (cb) cb();
+            return;
+          }
+          const line = lines[li];
+          if (ci < line.length){
+            result.textContent += line[ci++];
+            setTimeout(typeChar, charDelay);
+          } else {
+            result.textContent += '\n';
+            ci = 0;
+            li++;
+            setTimeout(typeChar, charDelay + 80);
+          }
+        }
+        typeChar();
+      }
+    })();
   </script>
 </body>
-<!--  The cat leaves its pawprints in places few inspect.-->
 </html>

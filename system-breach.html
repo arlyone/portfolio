@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💻 System Breach — Operation Catnip</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+  body {
+    background: radial-gradient(circle at 30% 40%, #0d1b2a 0%, #000814 100%);
+    color: #dbeefd;
+    font-family: 'Fira Code', monospace;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .terminal {
+    width: min(90%, 850px);
+    background: #0a0f1a;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(92, 51, 255, 0.3);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .terminal-header {
+    background: #1e2635;
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+
+  .timer {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 0.9rem;
+    color: #9fb3c8;
+    transition: color 0.3s ease;
+  }
+
+  .timer.red {
+    color: #ff4d4d;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .terminal-body {
+    padding: 18px;
+    overflow-y: auto;
+    max-height: 70vh;
+  }
+
+  .output {
+    white-space: pre-wrap;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background: #7ef29b;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+    margin-left: 3px;
+  }
+
+  @keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+  }
+
+  .input-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .prompt { color: #7ef29b; }
+
+  input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #eaffef;
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 14px 26px;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #7c3aed, #5b21b6);
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+  }
+
+  .center {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+      <span style="color:#7ef29b; font-size:0.9rem; margin-left:6px;">System Breach — Operation Catnip</span>
+    </div>
+
+    <div class="timer" id="timer">⚠️ Lockdown in 69s</div>
+
+    <div class="terminal-body" id="terminal">
+      <div class="output" id="output">
+        🌐 <strong>System Breach: Operation Catnip</strong><br>
+        Secure node connection established.<br>
+        Type <span style="color:#9fb3c8">help</span> to begin.
+      </div>
+
+      <div class="input-line" id="mainInputLine">
+        <span class="prompt">agent@kiki:~$</span>
+        <input type="text" id="commandInput" autocomplete="off" autofocus placeholder="type a command..." />
+      </div>
+
+      <div class="input-line hidden" id="passwordLine">
+        <span class="prompt">Password required:</span>
+        <input type="text" id="passwordInput" autocomplete="off" />
+      </div>
+
+      <div id="buttonContainer" class="center hidden">
+        <button onclick="window.location.href='dashboard.html'">🧭 Return to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const input = document.getElementById('commandInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const buttonContainer = document.getElementById('buttonContainer');
+    const passwordLine = document.getElementById('passwordLine');
+    const mainInputLine = document.getElementById('mainInputLine');
+    const timerDisplay = document.getElementById('timer');
+
+    let stage = 0;
+    let awaitingPassword = false;
+    let timeLeft = 69;
+    let timerInterval;
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `⚠️ Lockdown in ${timeLeft}s`;
+        if (timeLeft <= 10) {
+          timerDisplay.classList.add('red');
+        }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          lockSystem();
+        }
+      }, 1000);
+    }
+
+    function lockSystem() {
+      mainInputLine.classList.add('hidden');
+      passwordLine.classList.add('hidden');
+      print('❌ SYSTEM LOCKDOWN INITIATED — SESSION TERMINATED.', '#ff4d4d');
+    }
+
+    startTimer();
+
+    function print(text, color="#dbeefd", blink=false) {
+      output.querySelectorAll('.cursor').forEach(c => c.remove());
+      const line = document.createElement('div');
+      line.className = 'output';
+      line.style.color = color;
+      line.textContent = text;
+      if (blink) {
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        line.appendChild(cursor);
+      }
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const cmd = input.value.trim();
+        input.value = '';
+        handleCommand(cmd);
+      }
+    });
+
+    passwordInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const pass = passwordInput.value.trim();
+        passwordInput.value = '';
+        handlePassword(pass);
+      }
+    });
+
+    function handleCommand(cmd) {
+      if (!cmd) return;
+      output.querySelectorAll('.cursor').forEach(c => c.remove());
+      print(`agent@kiki:~$ ${cmd}`, "#7ef29b");
+
+      switch(cmd.toLowerCase()) {
+        case "help":
+          print("Available commands:\n- list ............... show files\n- cat [file] ......... view file\n- unlock access.enc .. unlock the final vault\n- clear .............. reset session", "#86a7bf", true);
+          break;
+
+        case "list":
+          print("Directory contents:\n- log1.txt\n- cipher.txt\n- access.enc", "#7ef29b", true);
+          break;
+
+        case "cat log1.txt":
+          print("Encoded message:\nU29tZXRoaW5nIGFib3V0IGNhdHMuIEl0J3Mgbm90IHNvIHNlY3JldC4uLiBUcnkgZGVjb2RpbmcgY2lwaGVyLnR4dA==", "#9fb3c8", true);
+          stage = Math.max(stage, 1);
+          break;
+
+        case "cat cipher.txt":
+          if (stage < 1) {
+            print("⚠️ You haven’t found the hint for this yet.", "#f2a6a6", true);
+          } else {
+            print("--- CIPHER BLOCK ---\n01001101 01000101 01001111 01010111\nHint: Binary might not be your strongest suit, but it’s simple to read.", "#9fb3c8", true);
+            stage = Math.max(stage, 2);
+          }
+          break;
+
+        case "unlock access.enc":
+          if (stage < 2) {
+            print("❌ You need the decoded key first (from cipher.txt).", "#f2a6a6", true);
+          } else {
+            print("🔐 Password required to unlock access.enc:", "#7ef29b", true);
+            awaitingPassword = true;
+            mainInputLine.classList.add('hidden');
+            passwordLine.classList.remove('hidden');
+            passwordInput.focus();
+          }
+          break;
+
+        case "clear":
+          output.innerHTML = '💾 New session started.<br>';
+          stage = 0;
+          awaitingPassword = false;
+          break;
+
+        default:
+          print(`Unknown command: ${cmd}`, "#f2a6a6", true);
+      }
+    }
+
+    function handlePassword(pass) {
+      output.querySelectorAll('.cursor').forEach(c => c.remove());
+      mainInputLine.classList.remove('hidden');
+      passwordLine.classList.add('hidden');
+
+      if (pass === "MEOW") {
+        simulateDecrypt();
+      } else {
+        print("❌ Incorrect password. Try again.", "#f2a6a6", true);
+      }
+    }
+
+    function simulateDecrypt() {
+      print("[Decrypting access.enc...]", "#9fb3c8");
+      let pct = 0;
+      const interval = setInterval(() => {
+        pct += 25;
+        print(`Progress: ${pct}%`, "#86a7bf");
+        if (pct >= 100) {
+          clearInterval(interval);
+          print("✅ Command successful. Mission completed. Great work, agent.", "#7ef29b");
+          clearInterval(timerInterval);
+
+          mainInputLine.classList.add('hidden');
+          passwordLine.classList.add('hidden');
+          buttonContainer.classList.remove('hidden');
+
+          let clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
+          if (!clues.includes(3)) clues.push(3);
+          localStorage.setItem('ctfClues', JSON.stringify(clues));
+
+          const progress = JSON.parse(localStorage.getItem('ctfProgress') || '{}');
+          progress.stage3 = true;
+          localStorage.setItem('ctfProgress', JSON.stringify(progress));
+          localStorage.setItem('ctfUpdate', Date.now());
+        }
+      }, 500);
+    }
+  </script>
+</body>
+
+<!-- Please Keep an eye on https://arly.live/ for upcoming projects-->
+</html>

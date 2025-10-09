@@ -83,7 +83,7 @@ Passionate cybersecurity researcher and penetration tester. Experienced in web a
 📧 **Email:** itsarlyone@gmail.com  
 🌐 **Portfolio:** [arly.one](https://arly.one)  
 🐙 **GitHub:** [ArunBhandarii](https://github.com/arlyone)  
-💼 **LinkedIn:** [Arun Bhandari](https://www.linkedin.com/in/itsarly/)
+💼 **LinkedIn:** [Arun Bhandari](https://www.linkedin.com/in/arlyone/)
 
 ---
 

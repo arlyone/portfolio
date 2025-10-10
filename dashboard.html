@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Detective Dashboard | Arlyverse</title>
-  <meta name="description" content="CTF Detective Dashboard - Track your progress and clues in Arlyone's universe" />
+  <meta name="description" content="CTF Detective Dashboard - Track your progress, see clues, and monitor your case in Arlyone's universe." />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -32,13 +32,20 @@
       transition: 0.3s;
     }
     .btn:hover { background: #6d28d9; }
+    .btn.locked {
+      background: #333;
+      color: #888;
+      pointer-events: none;
+      cursor: not-allowed;
+      border: 1px dashed #555;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center text-center p-6">
   
   <div class="max-w-3xl">
     <h1 class="text-4xl font-extrabold mb-4 text-purple-400">🕵️ Detective Dashboard</h1>
-    <p class="text-gray-400 mb-8">Welcome back, agent. Track your progress, see clues you've found, and monitor your journey through the Arlyverse.</p>
+    <p class="text-gray-400 mb-8">Welcome back, agent. Track your progress, see clues you’ve found, and monitor your mission through the Arlyverse.</p>
 
     <div class="grid md:grid-cols-3 gap-6 mb-10">
       <div class="card">
@@ -61,7 +68,7 @@
 
     <div class="flex flex-col md:flex-row justify-center gap-4">
       <a href="detective.html" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Start the Hunt</a>
-      <a href="interrogation.html" class="btn"><i class="fa-solid fa-lock-open"></i> Final Interrogation</a>
+      <a id="interrogationBtn" href="interrogation.html" class="btn locked"><i class="fa-solid fa-lock"></i> Final Interrogation</a>
       <a href="index.html" class="btn"><i class="fa-solid fa-home"></i> Back to Portfolio</a>
     </div>
   </div>
@@ -81,10 +88,12 @@
 
       // Status rank logic
       const statusText = clueCount >= 5 ? 'Master Detective' :
-                         clueCount >= 3 ? 'Field Agent' : 'Rookie';
+                         clueCount >= 3 ? 'Field Agent' :
+                         clueCount >= 1 ? 'Investigator' :
+                         'Rookie';
       document.getElementById('status').textContent = statusText;
 
-      // Display clues
+      // Display found clues
       const clueList = document.getElementById('clueList');
       clueList.innerHTML = '';
 
@@ -98,18 +107,22 @@
       } else {
         clueList.innerHTML = '<p class="text-gray-400">No clues yet — start your investigation!</p>';
       }
+
+      const interrogationBtn = document.getElementById('interrogationBtn');
+      if (clues.includes(1)) {
+        interrogationBtn.classList.remove('locked');
+        interrogationBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Final Interrogation';
+      } else {
+        interrogationBtn.classList.add('locked');
+        interrogationBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Final Interrogation';
+      }
     }
 
     // Initial load
     updateDashboard();
 
-    // Live updates across tabs
+    // Listen for cross-tab or tab-visibility updates
     window.addEventListener('storage', updateDashboard);
-
-    // Auto-refresh every second (to catch local changes)
-    setInterval(updateDashboard, 1000);
-
-    // Refresh when coming back to tab
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) updateDashboard();
     });

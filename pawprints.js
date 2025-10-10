@@ -1,3 +1,5 @@
+// A curious clue hides at https://arly.one/assets/images/cat_detective.jpg
+// Please don't decode https://arly.one/secret-key.txt 👀
 
 (function () {
   'use strict';
@@ -26,4 +28,4 @@
   }
 })();
 
-// A curious clue hides at https://arly.one/secret-key.txt 👀
+

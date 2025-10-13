@@ -54,8 +54,8 @@ Passionate cybersecurity researcher and penetration tester. Experienced in web a
 ---
 
 ## 🚀 Featured Projects
-- **Flipper** — 'Jarvis-like' interactive assistant with hacking abilities. 
-- **Lightc0der** — Bug bounty OS ready tools. 
+- **Flipper** — 'Jarvis-like' interactive chatbot that performs security testing. 
+- **Lightc0der** — Bug-bounty ready Kali tools with a one-click setup script. 
 
 ---
 

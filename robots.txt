@@ -1,4 +1,5 @@
 # Disallow: /secret-key.txt 
 /assets/images/cat_detective.jpg
+/system-breach
 
-# Hint: Analyze the image file. 
+# Hint: Analyze the image file.

@@ -32,7 +32,7 @@
       background: var(--panel);
       border-radius:12px;
       padding:28px 34px;
-      width: min(92%, 550px);
+      width: min(92%, 600px);
       border: 1px solid rgba(255,255,255,0.04);
       box-shadow: 0 8px 36px rgba(92,51,255,0.12);
       text-align:center;
@@ -42,7 +42,35 @@
     h2 { color: var(--accent); margin:0 0 10px; font-size:1.5rem; }
     p { color: var(--muted); margin:0 0 18px; line-height:1.45; }
 
-    .row { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:6px; }
+    .puzzle-step {
+      background: rgba(126, 242, 155, 0.05);
+      border: 1px solid rgba(126, 242, 155, 0.2);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .puzzle-step.active {
+      display: block;
+      animation: slideIn 0.5s ease;
+    }
+
+    .step-title {
+      color: #7ef29b;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .step-instruction {
+      color: #9fb3c8;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .row { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:10px; }
     input[type="text"] {
       padding:10px 12px;
       border-radius:6px;
@@ -119,6 +147,26 @@
       transition: opacity .3s ease;
     }
 
+    .feedback {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+    }
+
+    .feedback.error {
+      background: rgba(242, 166, 166, 0.1);
+      color: #f2a6a6;
+      border: 1px solid rgba(242, 166, 166, 0.3);
+    }
+
+    .feedback.success {
+      background: rgba(126, 242, 155, 0.1);
+      color: #7ef29b;
+      border: 1px solid rgba(126, 242, 155, 0.3);
+    }
+
     .monosmall { font-family: 'Fira Code', monospace; color:#9fb3c8; font-size:0.86rem; }
 
     footer { margin-top:18px; color:#607d8b; font-size:0.8rem; }
@@ -145,6 +193,11 @@
       to { opacity:1; transform: translateY(0); }
     }
 
+    @keyframes slideIn {
+      from { opacity:0; transform: translateY(10px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+
     @media (max-width:480px){
       input[type="text"]{ width:60%; }
       .wrap{ padding:20px; }
@@ -155,14 +208,35 @@
 <body>
   <div class="wrap" role="main" aria-labelledby="title">
     <h2 id="title">🕵️ The Final Interrogation</h2>
-    <p class="monosmall">The suspect won’t give up the password easily.<br>
-      Remove all spaces from the phrase you found… then reverse it.</p>
+    <p class="monosmall">The suspect won’t give up the password easily. You'll need to solve two puzzles to extract the password.</p>
 
-    <div class="row" aria-hidden="false">
-      <input id="pwd" type="text" placeholder="Enter reversed password" aria-label="reversed password">
-      <button id="go">Unlock</button>
+    <!-- Step 1 -->
+    <div class="puzzle-step active" id="step1">
+      <div class="step-title">🔐 STEP 1: Construct the Password</div>
+      <div class="step-instruction">
+        Take the phrase you found in Stage 1, remove all spaces, and reverse it.<br>
+      </div>
+      <div class="row">
+        <input id="step1Input" type="text" placeholder="Enter reversed password">
+        <button onclick="checkStep1()">Submit</button>
+      </div>
+      <div id="step1Feedback"></div>
     </div>
 
+    <!-- Step 2 -->
+    <div class="puzzle-step" id="step2">
+      <div class="step-title">👁️ STEP 2: Agent Intelligence Test</div>
+      <div class="step-instruction">
+        Every good detective knows their subject. What color are Agent Kiki's eyes?<br>
+      </div>
+      <div class="row">
+        <input id="step2Input" type="text" placeholder="Enter eye color">
+        <button onclick="checkStep2()">Submit</button>
+      </div>
+      <div id="step2Feedback"></div>
+    </div>
+
+  
     <div class="decrypt" id="decryptUI" aria-hidden="true" aria-live="polite">
       <div class="status" id="stageText">[idle]</div>
       <div class="bar" aria-hidden="true"><i id="barFill" style="width:0%"></i></div>
@@ -171,146 +245,179 @@
 
     <div id="result" role="status" aria-live="polite"></div>
     
-    <a href="system-breach.html" id="dashButton" class="dash-btn">💻 Continue to the Final Operation </a>
+    <a href="system-breach.html" id="dashButton" class="dash-btn">💻 Continue to System Breach</a>
 
-    <footer>Case File #007 — keep your eyes sharp.</footer>
+    <footer>Case File #007 - keep your eyes sharp.</footer>
   </div>
 
   <script src="pawprints.js"></script>
   <script>
-    (function(){
-      const go = document.getElementById('go');
-      const input = document.getElementById('pwd');
-      const result = document.getElementById('result');
+    function checkStep1() {
+      const input = document.getElementById('step1Input').value.trim();
+      const feedback = document.getElementById('step1Feedback');
+      
+      if (typeof STAGE1_FLAG === 'undefined') {
+        feedback.className = 'feedback error';
+        feedback.textContent = '⚠️ Clue data not loaded.';
+        return;
+      }
+
+      const core = STAGE1_FLAG.replace(/\s+/g, '');
+      const expected = core.split('').reverse().join('');
+
+      if (input === expected) {
+        feedback.className = 'feedback success';
+        feedback.textContent = '✅ Correct! Moving to Step 2...';
+        setTimeout(() => {
+          document.getElementById('step1').classList.remove('active');
+          document.getElementById('step2').classList.add('active');
+        }, 1500);
+      } else {
+        feedback.className = 'feedback error';
+        feedback.textContent = '❌ Not quite. Remember to include punctuation!';
+      }
+    }
+
+    function checkStep2() {
+      const input = document.getElementById('step2Input').value.trim().toLowerCase();
+      const feedback = document.getElementById('step2Feedback');
+      
+      if (input === 'amber') {
+        feedback.className = 'feedback success';
+        feedback.textContent = '✅ Correct! Agent Kiki has striking amber eyes. Decrypting...';
+        setTimeout(startDecryptSequence, 1000);
+      } else {
+        feedback.className = 'feedback error';
+        feedback.textContent = '❌ Not quite. Did you check the secret-key file thoroughly?';
+      }
+    }
+
+    document.getElementById('step1Input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkStep1();
+      }
+    });
+
+    document.getElementById('step2Input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkStep2();
+      }
+    });
+
+    function startDecryptSequence(){
+      document.getElementById('step2').style.display = 'none';
       const decryptUI = document.getElementById('decryptUI');
       const stageText = document.getElementById('stageText');
       const barFill = document.getElementById('barFill');
       const percentText = document.getElementById('percentText');
+      
+      decryptUI.style.display = 'flex';
+      decryptUI.setAttribute('aria-hidden','false');
+      barFill.style.width = '0%';
+      percentText.textContent = '0%';
+      stageText.textContent = '[initializing cryptomodule]';
+
+      const stages = [
+        { text:'[initializing cryptomodule]', pct:6,  dur:350 },
+        { text:'[gathering entropy]',         pct:18, dur:500 },
+        { text:'[running deobfuscator]',     pct:36, dur:700 },
+        { text:'[attempting pattern-match]', pct:54, dur:800 },
+        { text:'[brute-forcing weak layers]',pct:74, dur:1000 },
+        { text:'[assembling payload]',       pct:90, dur:600 },
+        { text:'[finalizing output]',        pct:100,dur:400 }
+      ];
+
+      let i=0;
+      function runStage(){
+        if (i>=stages.length) return revealSuccess();
+        const s = stages[i];
+        stageText.textContent = s.text;
+        animateBarTo(s.pct, s.dur, () => {
+          i++;
+          setTimeout(runStage, 60);
+        });
+      }
+      runStage();
+    }
+
+    function animateBarTo(targetPct, duration, cb){
+      const barFill = document.getElementById('barFill');
+      const percentText = document.getElementById('percentText');
+      const startWidth = parseFloat(barFill.style.width) || 0;
+      const start = performance.now();
+      const end = start + duration;
+      function step(now){
+        const t = Math.min(1, (now - start) / duration);
+        const eased = t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
+        const cur = startWidth + (targetPct - startWidth) * eased;
+        barFill.style.width = cur + '%';
+        percentText.textContent = Math.round(cur) + '%';
+        if (now < end) requestAnimationFrame(step);
+        else {
+          barFill.style.width = targetPct + '%';
+          percentText.textContent = targetPct + '%';
+          if (typeof cb === 'function') cb();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function revealSuccess(){
+      const stageText = document.getElementById('stageText');
+      const percentText = document.getElementById('percentText');
+      const result = document.getElementById('result');
       const dashButton = document.getElementById('dashButton');
-
-      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptUnlock(); });
-      go.addEventListener('click', attemptUnlock);
-
-      function attemptUnlock(){
-        const attempt = input.value.trim();
-        result.textContent = '';
-        if (typeof STAGE1_FLAG === 'undefined'){
-          result.style.color = '#f2a6a6';
-          result.textContent = '⚠️ Clue data not loaded.';
-          return;
-        }
-
-        const core = STAGE1_FLAG.replace(/\s+/g, '');
-        const expected = core.split('').reverse().join('');
-
-        if (attempt !== expected) {
-          result.style.color = '#f2a6a6';
-          result.textContent = '❌ Incorrect password. Keep thinking, detective.';
-          return;
-        }
-
-        startDecryptSequence();
-      }
-
-      function startDecryptSequence(){
-        decryptUI.style.display = 'flex';
-        decryptUI.setAttribute('aria-hidden','false');
-        barFill.style.width = '0%';
-        percentText.textContent = '0%';
-        stageText.textContent = '[initializing cryptomodule]';
-
-        const stages = [
-          { text:'[initializing cryptomodule]', pct:6,  dur:350 },
-          { text:'[gathering entropy]',         pct:18, dur:500 },
-          { text:'[running deobfuscator]',     pct:36, dur:700 },
-          { text:'[attempting pattern-match]', pct:54, dur:800 },
-          { text:'[brute-forcing weak layers]',pct:74, dur:1000 },
-          { text:'[assembling payload]',       pct:90, dur:600 },
-          { text:'[finalizing output]',        pct:100,dur:400 }
+      
+      stageText.textContent = '[decrypt complete]';
+      percentText.textContent = '100%';
+      setTimeout(() => {
+        const lines = [
+          '🐈 Case closed – Vault Bypassed:',
+          'Proceed to System Breach, agent.'
         ];
+        typeLines(lines, 30, () => {
+          let clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
+          if (!clues.includes(2)) clues.push(2);
+          localStorage.setItem('ctfClues', JSON.stringify(clues));
 
-        let i=0;
-        function runStage(){
-          if (i>=stages.length) return revealSuccess();
-          const s = stages[i];
-          stageText.textContent = s.text;
-          animateBarTo(s.pct, s.dur, () => {
-            i++;
-            setTimeout(runStage, 60);
-          });
+          const progress = JSON.parse(localStorage.getItem('ctfProgress') || '{}');
+          progress.stage2 = true;
+          localStorage.setItem('ctfProgress', JSON.stringify(progress));
+
+          localStorage.setItem('ctfUpdate', Date.now());
+
+          result.style.color = '#7ef29b';
+          result.style.opacity = 1;
+
+          dashButton.style.display = 'inline-block'; 
+        });
+      }, 400);
+    }
+
+    function typeLines(lines, charDelay = 35, cb){
+      const result = document.getElementById('result');
+      result.textContent = '';
+      let li = 0, ci = 0;
+      function typeChar(){
+        if (li >= lines.length) {
+          if (cb) cb();
+          return;
         }
-        runStage();
-      }
-
-      function animateBarTo(targetPct, duration, cb){
-        const startWidth = parseFloat(barFill.style.width) || 0;
-        const start = performance.now();
-        const end = start + duration;
-        function step(now){
-          const t = Math.min(1, (now - start) / duration);
-          const eased = t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
-          const cur = startWidth + (targetPct - startWidth) * eased;
-          barFill.style.width = cur + '%';
-          percentText.textContent = Math.round(cur) + '%';
-          if (now < end) requestAnimationFrame(step);
-          else {
-            barFill.style.width = targetPct + '%';
-            percentText.textContent = targetPct + '%';
-            if (typeof cb === 'function') cb();
-          }
+        const line = lines[li];
+        if (ci < line.length){
+          result.textContent += line[ci++];
+          setTimeout(typeChar, charDelay);
+        } else {
+          result.textContent += '\n';
+          ci = 0;
+          li++;
+          setTimeout(typeChar, charDelay + 80);
         }
-        requestAnimationFrame(step);
       }
-
-      function revealSuccess(){
-        stageText.textContent = '[decrypt complete]';
-        percentText.textContent = '100%';
-        setTimeout(() => {
-          const lines = [
-            '🐈 Case closed — Final message:',
-            'kiki is cute. <3'
-          ];
-          typeLines(lines, 30, () => {
-            let clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
-            if (!clues.includes(2)) clues.push(2);
-            localStorage.setItem('ctfClues', JSON.stringify(clues));
-
-            const progress = JSON.parse(localStorage.getItem('ctfProgress') || '{}');
-            progress.stage2 = true;
-            localStorage.setItem('ctfProgress', JSON.stringify(progress));
-
-            localStorage.setItem('ctfUpdate', Date.now());
-
-            result.style.color = '#7ef29b';
-            result.style.opacity = 1;
-
-            dashButton.style.display = 'inline-block'; 
-          });
-        }, 400);
-      }
-
-      function typeLines(lines, charDelay = 35, cb){
-        result.textContent = '';
-        let li = 0, ci = 0;
-        function typeChar(){
-          if (li >= lines.length) {
-            if (cb) cb();
-            return;
-          }
-          const line = lines[li];
-          if (ci < line.length){
-            result.textContent += line[ci++];
-            setTimeout(typeChar, charDelay);
-          } else {
-            result.textContent += '\n';
-            ci = 0;
-            li++;
-            setTimeout(typeChar, charDelay + 80);
-          }
-        }
-        typeChar();
-      }
-    })();
+      typeChar();
+    }
   </script>
 </body>
 </html>

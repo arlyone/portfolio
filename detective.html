@@ -169,12 +169,12 @@
         if (!clues.includes(1)) clues.push(1); 
         localStorage.setItem('ctfClues', JSON.stringify(clues));
 
-        // Also mark main CTF progress
+        
         const progress = JSON.parse(localStorage.getItem('ctfProgress') || '{}');
         progress.stage1 = true;
         localStorage.setItem('ctfProgress', JSON.stringify(progress));
 
-        // Notify other tabs (dashboard) to update
+      
         localStorage.setItem('ctfUpdate', Date.now());
       } else {
         resp.style.color = '#f2a6a6';

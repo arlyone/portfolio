@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+<!------------------------------------------------------------------------------
+ ! Welcome to the CTF.
+ !
+ ! In the various pages, you'll find Flags, and terminal commands
+ ! (that remains local to your machine and never reaches my system) and various
+ ! innocuous challenges. Have fun!
+ !
+ ! Arlyone
+ !------------------------------------------------------------------------------>
+
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -30,6 +40,7 @@
       border-radius: 8px;
       text-decoration: none;
       transition: 0.3s;
+      display: inline-block;
     }
     .btn:hover { background: #6d28d9; }
     .btn.locked {
@@ -45,7 +56,7 @@
   
   <div class="max-w-3xl">
     <h1 class="text-4xl font-extrabold mb-4 text-purple-400">🕵️ Detective Dashboard</h1>
-    <p class="text-gray-400 mb-8">Welcome back, agent. Track your progress, see clues you’ve found, and monitor your mission through the Arlyverse.</p>
+    <p class="text-gray-400 mb-8">Welcome back, agent. Track your progress, see clues you've found, and monitor your mission through the Arlyverse.</p>
 
     <div class="grid md:grid-cols-3 gap-6 mb-10">
       <div class="card">
@@ -66,34 +77,38 @@
 
     <div id="clueList" class="grid gap-4 mb-10"></div>
 
-    <div class="flex flex-col md:flex-row justify-center gap-4">
+    <div class="flex flex-col md:flex-row justify-center gap-4 flex-wrap">
       <a href="detective.html" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Start the Hunt</a>
-      <a id="interrogationBtn" href="interrogation.html" class="btn locked"><i class="fa-solid fa-lock"></i> Final Interrogation</a>
+      
+      <!-- Single dynamic Next Phase button -->
+      <a id="nextPhaseBtn" href="#" class="btn locked"><i class="fa-solid fa-lock"></i> Next Phase</a>
+
       <a href="index.html" class="btn"><i class="fa-solid fa-home"></i> Back to Portfolio</a>
     </div>
   </div>
 
   <footer class="mt-10 text-gray-500 text-sm">
-    <p>&copy; 2025 Arlyone — Keep chasing the truth 🕶️</p>
+    <p>&copy; 2025 Arlyone – Keep chasing the truth </p>
   </footer>
 
   <script>
     function updateDashboard() {
       const clues = JSON.parse(localStorage.getItem('ctfClues')) || [];
+      const progress = JSON.parse(localStorage.getItem('ctfProgress')) || {};
       const clueCount = clues.length;
       const pawprints = clueCount * 3;
 
       document.getElementById('clueCount').textContent = clueCount;
       document.getElementById('pawprints').textContent = pawprints;
 
-      // Status rank logic
-      const statusText = clueCount >= 5 ? 'Master Detective' :
-                         clueCount >= 3 ? 'Field Agent' :
+    
+      const statusText = clueCount >= 3 ? 'Agent 007' :
+                         clueCount >= 2 ? 'Field Agent' :
                          clueCount >= 1 ? 'Investigator' :
                          'Rookie';
       document.getElementById('status').textContent = statusText;
 
-      // Display found clues
+      
       const clueList = document.getElementById('clueList');
       clueList.innerHTML = '';
 
@@ -101,31 +116,61 @@
         clues.forEach((num) => {
           const el = document.createElement('div');
           el.className = 'card text-left';
-          el.innerHTML = `<strong class="text-purple-400">Clue #${num}</strong> — Retrieved successfully.`;
+          el.innerHTML = `<strong class="text-purple-400">Clue #${num}</strong> – Retrieved successfully.`;
           clueList.appendChild(el);
         });
       } else {
-        clueList.innerHTML = '<p class="text-gray-400">No clues yet — start your investigation!</p>';
+        clueList.innerHTML = '<p class="text-gray-400">No clues yet – start your investigation!</p>';
       }
 
-      const interrogationBtn = document.getElementById('interrogationBtn');
-      if (clues.includes(1)) {
-        interrogationBtn.classList.remove('locked');
-        interrogationBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Final Interrogation';
+     
+      const nextPhaseBtn = document.getElementById('nextPhaseBtn');
+      let unlocked = false;
+      let nextHref = '#';
+      let nextLabel = 'Next Phase (Locked)';
+
+    
+      if (progress.stage1 || clues.includes(1)) {
+        unlocked = true;
+        nextHref = 'interrogation.html';
+        nextLabel = 'Proceed to Interrogation';
+      }
+
+      if (progress.stage2 || clues.includes(2)) {
+        unlocked = true;
+        nextHref = 'system-breach.html';
+        nextLabel = 'Proceed to System Breach';
+      }
+
+     
+      if (progress.stage3 || clues.includes(3)) {
+        unlocked = true;
+        nextHref = 'https://arly.live/';
+        nextLabel = 'Enter the Arlyverse';
+      }
+
+      if (unlocked) {
+        nextPhaseBtn.classList.remove('locked');
+        nextPhaseBtn.href = nextHref;
+        nextPhaseBtn.target = nextHref.startsWith('http') ? '_blank' : '_self';
+        nextPhaseBtn.innerHTML = `<i class="fa-solid fa-lock-open"></i> ${nextLabel}`;
       } else {
-        interrogationBtn.classList.add('locked');
-        interrogationBtn.innerHTML = '<i class="fa-solid fa-lock"></i> Final Interrogation';
+        nextPhaseBtn.classList.add('locked');
+        nextPhaseBtn.href = '#';
+        nextPhaseBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Next Phase (Locked)`;
       }
     }
 
-    // Initial load
+    
     updateDashboard();
 
-    // Listen for cross-tab or tab-visibility updates
+    
     window.addEventListener('storage', updateDashboard);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) updateDashboard();
     });
+    nextPhaseBtn.target = nextHref.startsWith('http') ? '_blank' : '_self';
+
   </script>
 </body>
 </html>

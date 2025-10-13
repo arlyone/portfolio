@@ -5,7 +5,12 @@
   'use strict';
 
   try {
-    var b64 = 'a2lraSBpcyBjdXRlLg==';
+    var altKey1 = 'bWVvdyBtZW93IG1lb3c='; 
+    var altKey2 = 'Y2F0cyBhcmUgY3V0ZQ=='; 
+    var primaryKey = 'a2lraSBsb3ZlcyBmaXNo';
+    var altKey3 = 'cHVyciBwdXJyIHB1cnI='; 
+    
+    var b64 = 'a2lraSBsb3ZlcyB0dW5hLg==';
 
     
     if (!/^[A-Za-z0-9+/=]+$/.test(b64)) return;
@@ -24,8 +29,7 @@
       try { console.log('pawprints: base64 decoded.'); } catch (e) {}
     }
   } catch (err) {
-    // fail silently so page still works
+  
   }
 })();
-
 

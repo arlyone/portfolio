@@ -37,7 +37,7 @@
   .desktop-icon{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:12px;border-radius:8px;transition:all .2s;width:100px;text-align:center}
   .desktop-icon:hover{background:rgba(124,58,237,0.15);transform:translateY(-2px);box-shadow:0 4px 12px rgba(124,58,237,0.3)}
   .icon-image{font-size:3rem;filter:drop-shadow(0 2px 8px rgba(124,58,237,0.4))}
-  .icon-label{font-size:.75rem;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.8);word-break:break-word}
+  .icon-label{font-size:.75rem;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.8);word-wrap:break-word;overflow-wrap:break-word;hyphens:auto;max-width:90px}
 
   .taskbar{position:fixed;bottom:0;left:0;right:0;height:50px;background:linear-gradient(180deg,rgba(26,31,46,0.95) 0%,rgba(15,20,25,0.98) 100%);backdrop-filter:blur(10px);border-top:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 -2px 20px rgba(124,58,237,0.2);z-index:2000}
   
@@ -277,9 +277,13 @@
     
     <div class="context-menu-divider"></div>
     <div style="font-size:.75rem;color:#7c3aed;font-weight:600;padding:8px 12px">SYSTEM</div>
-    <div class="start-menu-item" onclick="openSettings();toggleStartMenu()">
-      <i class="fas fa-cog"></i>
-      <span>Settings</span>
+    <div class="start-menu-item" onclick="clearAllData();toggleStartMenu()">
+      <i class="fas fa-trash-alt"></i>
+      <span>Clear All Data</span>
+    </div>
+    <div class="start-menu-item" onclick="resetSystem();toggleStartMenu()">
+      <i class="fas fa-redo"></i>
+      <span>Reset System</span>
     </div>
   </div>
 
@@ -303,9 +307,13 @@
       <i class="fas fa-info-circle"></i>
       <span>Storage Info</span>
     </div>
+    <div class="context-menu-item" onclick="clearAllData()">
+      <i class="fas fa-trash-alt"></i>
+      <span>Clear All Data</span>
+    </div>
     <div class="context-menu-item" onclick="resetSystem()">
-      <i class="fas fa-trash-restore"></i>
-      <span>Clear All & Reset</span>
+      <i class="fas fa-redo"></i>
+      <span>Reset System</span>
     </div>
   </div>
 
@@ -329,7 +337,7 @@
         <div class="window-btn minimize" onclick="minimizeWindow('gameWindow')"></div>
         <div class="window-btn maximize"></div>
       </div>
-      <span class="game-title">🎮 Tic Tac Toe</span>
+      <span class="game-title">❌⭕ Tic Tac Toe</span>
     </div>
     <div class="game-content">
       <div class="game-status" id="gameStatus">Your turn! (X)</div>
@@ -347,6 +355,50 @@
       <div class="game-controls">
         <button class="game-btn" onclick="resetGame()">New Game</button>
         <button class="game-btn" onclick="closeGame()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Snake Game Window -->
+  <div class="game-window" id="snakeWindow" style="width:450px">
+    <div class="game-header" id="snakeHeader">
+      <div class="window-controls">
+        <div class="window-btn close" onclick="closeSnakeGame()"></div>
+        <div class="window-btn minimize" onclick="minimizeWindow('snakeWindow')"></div>
+        <div class="window-btn maximize"></div>
+      </div>
+      <span class="game-title">🐍 Snake Game</span>
+    </div>
+    <div class="game-content">
+      <div class="game-status" id="snakeStatus">Score: 0 | Use Arrow Keys</div>
+      <canvas id="snakeCanvas" width="400" height="400" style="border:2px solid rgba(124,58,237,0.5);border-radius:8px;background:rgba(10,15,26,0.8)"></canvas>
+      <div class="game-controls">
+        <button class="game-btn" onclick="startSnakeGame()">New Game</button>
+        <button class="game-btn" onclick="closeSnakeGame()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Window -->
+  <div class="notepad-window" id="settingsWindow" style="min-width:400px;max-width:500px">
+    <div class="notepad-header" id="settingsHeader">
+      <div class="window-controls">
+        <div class="window-btn close" onclick="closeSettings()"></div>
+        <div class="window-btn minimize" onclick="minimizeWindow('settingsWindow')"></div>
+        <div class="window-btn maximize"></div>
+      </div>
+      <span class="notepad-title">📊 Storage Info</span>
+    </div>
+    <div class="notepad-content" style="background:rgba(20,25,35,0.98);color:#dbeefd;padding:25px">
+      <h3 style="color:#7ef29b;margin-bottom:20px;font-size:1.2rem">Storage Information</h3>
+      
+      <div id="storageInfo" style="background:rgba(124,58,237,0.1);padding:20px;border-radius:8px;border:1px solid rgba(124,58,237,0.3);margin-bottom:20px">
+        <p style="margin:5px 0">Loading...</p>
+      </div>
+      
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(124,58,237,0.3)">
+        <p style="font-size:0.9rem;color:#9fb3c8">ArlyOS v2.0 Quantum Edition</p>
+        <p style="font-size:0.8rem;color:#6b7280;margin-top:5px">© 2025 Arun Bhandari</p>
       </div>
     </div>
   </div>
@@ -470,6 +522,20 @@ const winConditions = [
   [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
   [0, 4, 8], [2, 4, 6]              // Diagonals
 ];
+
+// Snake Game State
+let snakeGame = {
+  canvas: null,
+  ctx: null,
+  snake: [{x: 10, y: 10}],
+  food: {x: 15, y: 15},
+  dx: 0,
+  dy: 0,
+  score: 0,
+  gameLoop: null,
+  gridSize: 20,
+  tileCount: 20
+};
 
 // Load user files from localStorage
 function loadUserFiles(){
@@ -612,6 +678,8 @@ function makeDraggable(windowEl, headerEl){
 makeDraggable(terminalWindow, document.getElementById('terminalHeader'));
 makeDraggable(notepadWindow, document.getElementById('notepadHeader'));
 makeDraggable(document.getElementById('gameWindow'), document.getElementById('gameHeader'));
+makeDraggable(document.getElementById('snakeWindow'), document.getElementById('snakeHeader'));
+makeDraggable(document.getElementById('settingsWindow'), document.getElementById('settingsHeader'));
 
 // Tic Tac Toe Game Functions
 function openGame(){
@@ -725,6 +793,183 @@ function checkWinner(){
   currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
   const turn = currentPlayer === 'X' ? 'Your turn! (X)' : 'AI thinking... (O)';
   document.getElementById('gameStatus').textContent = turn;
+}
+
+// Snake Game Functions
+function openSnakeGame(){
+  const snakeWindow = document.getElementById('snakeWindow');
+  snakeWindow.classList.add('show');
+  if(!snakeWindow.style.left){
+    snakeWindow.style.left = '50%';
+    snakeWindow.style.top = '50%';
+    snakeWindow.style.transform = 'translate(-50%, -50%)';
+  }
+  snakeGame.canvas = document.getElementById('snakeCanvas');
+  snakeGame.ctx = snakeGame.canvas.getContext('2d');
+  startSnakeGame();
+}
+
+function closeSnakeGame(){
+  if(snakeGame.gameLoop) clearInterval(snakeGame.gameLoop);
+  document.getElementById('snakeWindow').classList.remove('show');
+}
+
+function startSnakeGame(){
+  if(snakeGame.gameLoop) clearInterval(snakeGame.gameLoop);
+  
+  snakeGame.snake = [{x: 10, y: 10}];
+  snakeGame.food = {x: 15, y: 15};
+  snakeGame.dx = 0;
+  snakeGame.dy = 0;
+  snakeGame.score = 0;
+  
+  updateSnakeStatus();
+  snakeGame.gameLoop = setInterval(updateSnake, 100);
+}
+
+function updateSnake(){
+  if(snakeGame.dx === 0 && snakeGame.dy === 0) return;
+  
+  const head = {x: snakeGame.snake[0].x + snakeGame.dx, y: snakeGame.snake[0].y + snakeGame.dy};
+  
+  // Check wall collision
+  if(head.x < 0 || head.x >= snakeGame.tileCount || head.y < 0 || head.y >= snakeGame.tileCount){
+    gameOver();
+    return;
+  }
+  
+  // Check self collision
+  for(let segment of snakeGame.snake){
+    if(head.x === segment.x && head.y === segment.y){
+      gameOver();
+      return;
+    }
+  }
+  
+  snakeGame.snake.unshift(head);
+  
+  // Check food collision
+  if(head.x === snakeGame.food.x && head.y === snakeGame.food.y){
+    snakeGame.score += 10;
+    updateSnakeStatus();
+    generateFood();
+  } else {
+    snakeGame.snake.pop();
+  }
+  
+  drawSnake();
+}
+
+function drawSnake(){
+  const ctx = snakeGame.ctx;
+  const gs = snakeGame.gridSize;
+  
+  // Clear canvas
+  ctx.fillStyle = 'rgba(10,15,26,0.8)';
+  ctx.fillRect(0, 0, snakeGame.canvas.width, snakeGame.canvas.height);
+  
+  // Draw snake
+  snakeGame.snake.forEach((segment, index) => {
+    ctx.fillStyle = index === 0 ? '#7ef29b' : '#5ce080';
+    ctx.fillRect(segment.x * gs, segment.y * gs, gs - 2, gs - 2);
+  });
+  
+  // Draw food
+  ctx.fillStyle = '#ff6b6b';
+  ctx.fillRect(snakeGame.food.x * gs, snakeGame.food.y * gs, gs - 2, gs - 2);
+}
+
+function generateFood(){
+  snakeGame.food = {
+    x: Math.floor(Math.random() * snakeGame.tileCount),
+    y: Math.floor(Math.random() * snakeGame.tileCount)
+  };
+  
+  // Make sure food doesn't spawn on snake
+  for(let segment of snakeGame.snake){
+    if(snakeGame.food.x === segment.x && snakeGame.food.y === segment.y){
+      generateFood();
+      return;
+    }
+  }
+}
+
+function updateSnakeStatus(){
+  document.getElementById('snakeStatus').textContent = `Score: ${snakeGame.score} | Use Arrow Keys`;
+}
+
+function gameOver(){
+  clearInterval(snakeGame.gameLoop);
+  document.getElementById('snakeStatus').textContent = `Game Over! Score: ${snakeGame.score} | Press New Game`;
+}
+
+// Snake controls
+document.addEventListener('keydown', (e) => {
+  if(!document.getElementById('snakeWindow').classList.contains('show')) return;
+  
+  switch(e.key){
+    case 'ArrowUp':
+      if(snakeGame.dy === 0){ snakeGame.dx = 0; snakeGame.dy = -1; }
+      e.preventDefault();
+      break;
+    case 'ArrowDown':
+      if(snakeGame.dy === 0){ snakeGame.dx = 0; snakeGame.dy = 1; }
+      e.preventDefault();
+      break;
+    case 'ArrowLeft':
+      if(snakeGame.dx === 0){ snakeGame.dx = -1; snakeGame.dy = 0; }
+      e.preventDefault();
+      break;
+    case 'ArrowRight':
+      if(snakeGame.dx === 0){ snakeGame.dx = 1; snakeGame.dy = 0; }
+      e.preventDefault();
+      break;
+  }
+});
+
+// Settings Functions
+function openSettings(){
+  const settingsWindow = document.getElementById('settingsWindow');
+  settingsWindow.classList.add('show');
+  if(!settingsWindow.style.left){
+    settingsWindow.style.left = '50%';
+    settingsWindow.style.top = '50%';
+    settingsWindow.style.transform = 'translate(-50%, -50%)';
+  }
+  updateStorageInfo();
+}
+
+function closeSettings(){
+  document.getElementById('settingsWindow').classList.remove('show');
+}
+
+function updateStorageInfo(){
+  const userFileCount = Object.keys(userFiles).length;
+  const totalFiles = Object.keys(files).length;
+  const systemFiles = totalFiles - userFileCount;
+  
+  document.getElementById('storageInfo').innerHTML = `
+    <p style="margin:5px 0"><strong>Total Files:</strong> ${totalFiles}</p>
+    <p style="margin:5px 0"><strong>System Files:</strong> ${systemFiles}</p>
+    <p style="margin:5px 0"><strong>User Files:</strong> ${userFileCount}</p>
+    <p style="margin:5px 0"><strong>Storage Type:</strong> localStorage</p>
+  `;
+}
+
+function clearUserFiles(){
+  if(confirm('⚠️ This will delete all your custom files. Continue?')){
+    localStorage.removeItem('arlyos_files');
+    userFiles = {};
+    // Reload files to original state
+    Object.keys(files).forEach(key => {
+      if(!files[key].includes('Arun Bhandari') && !files[key].includes('Featured Projects')){
+        delete files[key];
+      }
+    });
+    updateStorageInfo();
+    alert('✅ User files cleared!');
+    location.reload();
+  }
 }
 
 // Start Menu
@@ -980,6 +1225,12 @@ function handleCommand(cmd){
       print("  date .............. show date/time","command-item");
       print("  echo [text] ....... print text","command-item");
       
+      print("\n🎮 GAMES","command-category");
+      print("  games ............. list games","command-item");
+      print("  tictactoe, ttt .... Tic Tac Toe","command-item");
+      print("  snake ............. Snake Game","command-item");
+      print("  settings .......... open settings","command-item");
+      
       print("\n💡 Tip: Use arrow keys to navigate command history","info");
       break;
 
@@ -1105,6 +1356,30 @@ function handleCommand(cmd){
               /___/                    `;
       print(banner,"ascii-art");
       print("ArlyOS v2.0 – Quantum Edition","success");
+      break;
+
+    case "snake":
+      openSnakeGame();
+      print("🐍 Opening Snake Game...","success");
+      break;
+
+    case "game":
+    case "games":
+      print("\n🎮 AVAILABLE GAMES","command-category");
+      print("  • tictactoe - Play Tic Tac Toe","command-item");
+      print("  • snake - Play Snake Game","command-item");
+      print("\nType the game name to launch!","info");
+      break;
+
+    case "tictactoe":
+    case "ttt":
+      openGame();
+      print("❌⭕ Opening Tic Tac Toe...","success");
+      break;
+
+    case "settings":
+      openSettings();
+      print("⚙️ Opening Settings...","success");
       break;
 
     case "clear":

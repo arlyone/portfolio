@@ -1,17 +1,27 @@
+<!------------------------------------------------------------------------------
+ ! Welcome to the ARLY-OS.
+ !
+ ! In the various pages, you'll find terminal commands, and files/folders
+ ! (that remains local to your machine and never reaches my system) and various
+ ! innocuous challenges. Have fun!
+ !
+ ! A huge shoutout to Samy Kamkar! All my failures are on me, but every win I have is dedicated to Samy and Elliot. :D
+ ! Arlyone
+ !------------------------------------------------------------------------------>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Arlyverse — Arun Bhandari | Portfolio</title>
-<meta name="description" content="Arun Bhandari — Pentester & Cybersecurity Researcher (Arly) — portfolio desktop experience" />
+<title>Arlyverse – Arun Bhandari | Portfolio</title>
+<meta name="description" content="Arun Bhandari – Pentester & Cybersecurity Researcher (Arly) – portfolio desktop experience" />
 <style>
-  /* System Breach visuals preserved + purple/cyan highlights */
   @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   body{
     background:
-      linear-gradient(rgba(10,15,26,0.85),rgba(10,15,26,0.85)),
+      linear-gradient(rgba(10,15,26,0.9),rgba(10,15,26,0.9)),
       url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&q=80') center/cover fixed;
     color:#dbeefd;font-family:'Fira Code',monospace;height:100vh;overflow:hidden;position:relative;
   }
@@ -22,72 +32,126 @@
   }
   @keyframes scanlines{0%{transform:translateY(0)}100%{transform:translateY(4px)}}
 
-  /* Desktop grid */
   .desktop{padding:20px;display:grid;grid-template-columns:repeat(auto-fill,100px);gap:20px;height:calc(100vh - 50px);align-content:start;z-index:1}
 
   .desktop-icon{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:12px;border-radius:8px;transition:all .2s;width:100px;text-align:center}
-  .desktop-icon:hover{background:rgba(255,255,255,0.06);transform:translateY(-2px)}
-  .icon-image{font-size:3rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+  .desktop-icon:hover{background:rgba(124,58,237,0.15);transform:translateY(-2px);box-shadow:0 4px 12px rgba(124,58,237,0.3)}
+  .icon-image{font-size:3rem;filter:drop-shadow(0 2px 8px rgba(124,58,237,0.4))}
   .icon-label{font-size:.75rem;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.8);word-break:break-word}
 
-  /* Taskbar */
-  .taskbar{position:fixed;bottom:0;left:0;right:0;height:50px;background:linear-gradient(180deg,#1a1f2e 0%,#0f1419 100%);border-top:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 -2px 10px rgba(0,0,0,0.5);z-index:2000}
+  .taskbar{position:fixed;bottom:0;left:0;right:0;height:50px;background:linear-gradient(180deg,rgba(26,31,46,0.95) 0%,rgba(15,20,25,0.98) 100%);backdrop-filter:blur(10px);border-top:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 -2px 20px rgba(124,58,237,0.2);z-index:2000}
+  
+  .start-button{padding:8px 16px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border-radius:6px;font-size:.9rem;color:#fff;cursor:pointer;transition:all .2s;border:1px solid rgba(124,58,237,0.5);font-weight:600;display:flex;align-items:center;gap:6px}
+  .start-button:hover{background:linear-gradient(135deg,#8b5cf6,#6d28d9);transform:translateY(-2px);box-shadow:0 4px 12px rgba(124,58,237,0.4)}
+  
+  .start-menu{position:fixed;bottom:60px;left:12px;width:280px;background:rgba(15,20,30,0.98);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,0.4);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.8);display:none;z-index:2500;padding:12px}
+  .start-menu.show{display:block;animation:slideUp 0.2s ease}
+  @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  
+  .start-menu-header{padding:12px;border-bottom:1px solid rgba(124,58,237,0.3);margin-bottom:8px}
+  .start-menu-user{font-size:1.1rem;font-weight:600;color:#7ef29b}
+  .start-menu-subtitle{font-size:.8rem;color:#9fb3c8}
+  
+  .start-menu-item{padding:10px 12px;margin:4px 0;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;color:#dbeefd}
+  .start-menu-item:hover{background:rgba(124,58,237,0.2);transform:translateX(4px)}
+  .start-menu-item i{width:20px;text-align:center;color:#7c3aed}
+  
+  .context-menu{position:fixed;min-width:200px;background:rgba(15,20,30,0.98);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,0.4);border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.8);display:none;z-index:3000;padding:8px}
+  .context-menu.show{display:block;animation:fadeIn 0.15s ease}
+  
+  .context-menu-item{padding:10px 14px;margin:2px 0;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;color:#dbeefd;font-size:.9rem}
+  .context-menu-item:hover{background:rgba(124,58,237,0.3)}
+  .context-menu-item i{width:18px;text-align:center;color:#7c3aed}
+  .context-menu-divider{height:1px;background:rgba(124,58,237,0.3);margin:6px 0}
+  
+  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:4000;display:none;align-items:center;justify-content:center}
+  .modal-overlay.show{display:flex}
+  
+  .modal{background:rgba(20,25,35,0.98);border:1px solid rgba(124,58,237,0.4);border-radius:12px;padding:24px;min-width:350px;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.9)}
+  .modal-title{font-size:1.2rem;font-weight:600;color:#7ef29b;margin-bottom:16px}
+  .modal-input{width:100%;padding:10px 12px;background:rgba(126,242,155,0.05);border:1px solid rgba(126,242,155,0.3);border-radius:6px;color:#eaffef;font-family:'Fira Code',monospace;font-size:.95rem;margin-bottom:16px}
+  .modal-input:focus{outline:none;border-color:#7ef29b;box-shadow:0 0 12px rgba(126,242,155,0.3)}
+  .modal-buttons{display:flex;gap:10px;justify-content:flex-end}
+  .modal-btn{padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;transition:all .2s;font-family:'Fira Code',monospace}
+  .modal-btn.primary{background:linear-gradient(90deg,#7c3aed,#5b21b6);color:#fff;border:none}
+  .modal-btn.primary:hover{transform:scale(1.05);box-shadow:0 0 16px rgba(124,58,237,.5)}
+  .modal-btn.secondary{background:rgba(255,255,255,0.1);color:#dbeefd;border:1px solid rgba(124,58,237,0.3)}
+  .modal-btn.secondary:hover{background:rgba(255,255,255,0.15)}
   .taskbar-app{padding:8px 12px;background:rgba(124,58,237,0.18);border-radius:6px;font-size:.85rem;color:#dbeefd;cursor:pointer;transition:all .15s;border:1px solid transparent}
-  .taskbar-app:hover{background:rgba(124,58,237,0.34);border-color:rgba(124,58,237,0.6)}
+  .taskbar-app:hover{background:rgba(124,58,237,0.34);border-color:rgba(124,58,237,0.6);transform:translateY(-2px)}
   .taskbar-app.active{background:rgba(124,58,237,0.6);border-color:#7c3aed}
   .taskbar-clock{margin-left:auto;font-size:.9rem;color:#9fb3c8;display:flex;align-items:center;gap:10px}
-  .timer-badge{padding:4px 10px;border-radius:6px;font-size:.85rem;color:#ff7b7b;border:1px solid rgba(255,77,77,0.12)}
 
-  /* Terminal window */
-  .terminal-window{position:fixed;background:#0a0f1a;border-radius:10px;box-shadow:0 10px 50px rgba(0,0,0,.7);width:700px;max-width:90vw;max-height:80vh;z-index:1000;display:none;left:50%;top:50%;transform:translate(-50%,-50%)}
+  .terminal-window{position:fixed;background:rgba(10,15,26,0.95);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,0.3);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);width:750px;max-width:90vw;max-height:80vh;z-index:1000;display:none;left:50%;top:50%;transform:translate(-50%,-50%);transition:all 0.3s ease}
   .terminal-window.show{display:flex;flex-direction:column}
   .terminal-window.minimized{display:none}
-  .window-header{background:linear-gradient(180deg,#2d3548 0%,#1e2635 100%);display:flex;align-items:center;padding:10px 12px;gap:8px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:move;border-radius:10px 10px 0 0}
+  .terminal-window.maximized{border-radius:0;max-width:100vw;max-height:100vh}
+  .window-header{background:linear-gradient(180deg,rgba(45,53,72,0.9) 0%,rgba(30,38,53,0.9) 100%);display:flex;align-items:center;padding:12px 14px;gap:8px;border-bottom:1px solid rgba(124,58,237,0.3);cursor:move;border-radius:12px 12px 0 0;user-select:none}
   .window-controls{display:flex;gap:8px}
   .window-btn{width:12px;height:12px;border-radius:50%;cursor:pointer;transition:all .2s}
   .window-btn.close{background:#ff5f56}.window-btn.minimize{background:#ffbd2e}.window-btn.maximize{background:#27c93f}
-  .window-btn:hover{filter:brightness(1.2);transform:scale(1.1)}
-  .window-title{color:#7ef29b;font-size:.9rem;margin-left:8px}
-  .terminal-body{padding:18px;overflow-y:auto;max-height:60vh;flex-grow:1;scroll-behavior:smooth;display:flex;flex-direction:column}
-  .output{white-space:pre-wrap;line-height:1.6;margin-bottom:8px;opacity:0;animation:fadeIn .3s forwards}
+  .window-btn:hover{filter:brightness(1.3);transform:scale(1.15);box-shadow:0 0 8px currentColor}
+  .window-title{color:#7ef29b;font-size:.95rem;margin-left:8px;font-weight:600}
+  .terminal-body{padding:20px;overflow-y:auto;max-height:60vh;flex-grow:1;scroll-behavior:smooth;display:flex;flex-direction:column}
+  .output{white-space:pre-wrap;line-height:1.7;margin-bottom:8px;opacity:0;animation:fadeIn .3s forwards}
   @keyframes fadeIn{to{opacity:1}}
-  .output.typing{animation:typing .5s steps(40) forwards,fadeIn .1s forwards}
 
-  .progress-bar-container{margin:12px 0;padding:8px 0}
-  .progress-bar-bg{width:100%;height:20px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;border:1px solid rgba(126,242,155,0.3)}
-  .progress-bar-fill{height:100%;background:linear-gradient(90deg,#7ef29b,#5ce080);width:0%;transition:width .1s linear;box-shadow:0 0 10px rgba(126,242,155,.5)}
-  .progress-text{color:#7ef29b;font-size:.9rem;margin-top:6px}
-  .success-message{color:#7ef29b;text-shadow:0 0 10px rgba(126,242,155,.5);animation:glow 2s ease-in-out}
-  @keyframes glow{0%,100%{text-shadow:0 0 10px rgba(126,242,155,.5)}50%{text-shadow:0 0 20px rgba(126,242,155,.8)}}
+  .command-category{color:#a78bfa;font-weight:600;margin-top:12px;margin-bottom:6px}
+  .command-item{color:#9fb3c8;padding-left:16px}
+  .command-name{color:#7ef29b}
+  
+  .ascii-art{color:#7c3aed;font-size:.85rem;line-height:1.2;text-shadow:0 0 10px rgba(124,58,237,0.5)}
 
   .input-line{display:flex;align-items:center;gap:8px;margin-top:10px}
-  .prompt{color:#7ef29b}
-  input{flex-grow:1;background:transparent;border:none;outline:none;color:#eaffef;font-family:'Fira Code',monospace;font-size:1rem}
+  .prompt{color:#7ef29b;font-weight:600}
+  input{flex-grow:1;background:transparent;border:none;outline:none;color:#eaffef;font-family:'Fira Code',monospace;font-size:1rem;padding:0}
+  input:focus{outline:none}
 
-  .notepad-window{position:fixed;background:#f5f5f5;border-radius:10px;box-shadow:0 10px 50px rgba(0,0,0,.7);min-width:450px;max-width:700px;z-index:1001;display:none}
+  .notepad-window{position:fixed;background:rgba(245,245,245,0.98);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,0.2);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);min-width:500px;max-width:700px;z-index:1001;display:none;transition:all 0.3s ease}
   .notepad-window.show{display:flex;flex-direction:column}
-  .notepad-header{background:linear-gradient(180deg,#e8e8e8,#d4d4d4);border-bottom:1px solid #aaa;padding:10px 12px;display:flex;align-items:center;gap:8px;cursor:move;border-radius:10px 10px 0 0}
+  .notepad-window.maximized{width:100vw;height:calc(100vh - 50px);max-width:100vw;border-radius:0;left:0;top:0}
+  
+  .game-window{position:fixed;background:rgba(15,20,30,0.98);backdrop-filter:blur(20px);border:1px solid rgba(124,58,237,0.3);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.8);width:400px;z-index:1002;display:none;transition:all 0.3s ease}
+  .game-window.show{display:flex;flex-direction:column}
+  .game-header{background:linear-gradient(180deg,rgba(45,53,72,0.9) 0%,rgba(30,38,53,0.9) 100%);display:flex;align-items:center;padding:12px 14px;gap:8px;border-bottom:1px solid rgba(124,58,237,0.3);cursor:move;border-radius:12px 12px 0 0;user-select:none}
+  .game-title{color:#7ef29b;font-size:.95rem;margin-left:8px;font-weight:600}
+  .game-content{padding:24px;display:flex;flex-direction:column;align-items:center;gap:20px}
+  
+  .game-board{display:grid;grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);gap:8px;margin:20px 0}
+  .game-cell{background:rgba(124,58,237,0.1);border:2px solid rgba(124,58,237,0.3);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:3rem;font-weight:bold;transition:all .2s;user-select:none}
+  .game-cell:hover:not(.taken){background:rgba(124,58,237,0.2);transform:scale(1.05)}
+  .game-cell.taken{cursor:not-allowed}
+  .game-cell.x{color:#7ef29b}
+  .game-cell.o{color:#ff6b6b}
+  
+  .game-status{font-size:1.1rem;font-weight:600;color:#7ef29b;text-align:center;min-height:30px}
+  .game-controls{display:flex;gap:12px}
+  .game-btn{padding:10px 20px;background:linear-gradient(90deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;transition:all .2s;font-family:'Fira Code',monospace}
+  .game-btn:hover{transform:scale(1.05);box-shadow:0 0 16px rgba(124,58,237,.5)}
+  .notepad-header{background:linear-gradient(180deg,#e8e8e8,#d4d4d4);border-bottom:1px solid #aaa;padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:move;border-radius:12px 12px 0 0;user-select:none}
   .notepad-title{font-size:.95rem;color:#333;font-weight:600;margin-left:8px}
-  .notepad-content{background:white;padding:18px;font-family:'Courier New',monospace;color:#000;min-height:220px;max-height:60vh;overflow-y:auto;white-space:pre-wrap;font-size:.95rem;line-height:1.6;border-radius:0 0 10px 10px}
+  .notepad-content{background:white;padding:20px;font-family:'Courier New',monospace;color:#000;min-height:250px;max-height:60vh;overflow-y:auto;white-space:pre-wrap;font-size:.95rem;line-height:1.7;border-radius:0 0 12px 12px}
 
-  button{margin-top:12px;padding:10px 18px;font-size:1rem;background:linear-gradient(90deg,#7c3aed,#5b21b6);color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;transition:.2s;opacity:1}
-  button:hover{transform:scale(1.03);box-shadow:0 0 12px rgba(124,58,237,.35)}
+  button{margin-top:12px;padding:10px 18px;font-size:1rem;background:linear-gradient(90deg,#7c3aed,#5b21b6);color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;transition:.2s}
+  button:hover{transform:scale(1.05);box-shadow:0 0 16px rgba(124,58,237,.5)}
 
   .center{text-align:center;margin-top:16px}
   .hidden{display:none}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
   .terminal-spacer{flex-grow:1;min-height:20px}
 
-  /* Purple / cyan boot highlights */
-  .boot-line.purple{color:#caa8ff}
-  .boot-line.cyan{color:#7ef29b}
-  .quicklink{display:inline-block;margin-left:8px;padding:6px 10px;border-radius:6px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.2);color:#dbeefd;text-decoration:none;font-size:.8rem}
-  .quicklink:hover{background:linear-gradient(90deg,#8b5cf6, #6d28d9);color:#fff}
-  @media (max-width:720px){.desktop{grid-template-columns:repeat(auto-fill,80px);gap:12px;padding:12px}.terminal-window{width:92vw}}
+  .system-info{color:#9fb3c8;font-size:.9rem}
+  .success{color:#7ef29b}
+  .error{color:#ff6b6b}
+  .warning{color:#ffd93d}
+  .info{color:#6bcfff}
+
+  @media (max-width:720px){
+    .desktop{grid-template-columns:repeat(auto-fill,80px);gap:12px;padding:12px}
+    .terminal-window{width:92vw}
+  }
 </style>
 </head>
 <body>
-  <!-- Desktop Icons (portfolio themed) -->
   <div class="desktop" id="desktop">
     <div class="desktop-icon" onclick="openTerminal()">
       <div class="icon-image">👨🏻‍💻</div>
@@ -113,17 +177,21 @@
       <div class="icon-image">✉️</div>
       <div class="icon-label">contact.txt</div>
     </div>
+
+    <div class="desktop-icon" onclick="openFile('achievements.txt')">
+      <div class="icon-image">🏆</div>
+      <div class="icon-label">achievements.txt</div>
+    </div>
   </div>
 
-  <!-- Terminal Window (portfolio-themed boot, no timer / no "agent" greeting) -->
   <div class="terminal-window" id="terminalWindow">
     <div class="window-header" id="terminalHeader">
       <div class="window-controls">
         <div class="window-btn close" onclick="closeWindow('terminalWindow')"></div>
         <div class="window-btn minimize" onclick="minimizeWindow('terminalWindow')"></div>
-        <div class="window-btn maximize"></div>
+        <div class="window-btn maximize" onclick="maximizeWindow('terminalWindow')"></div>
       </div>
-      <span class="window-title">Terminal — arly@arlyone:~</span>
+      <span class="window-title">Terminal – arly@arlyone:~</span>
     </div>
     <div class="terminal-body" id="terminal">
       <div id="outputContainer"><div class="output" id="output"></div></div>
@@ -132,62 +200,165 @@
         <span class="prompt">arly@arlyone:~$</span>
         <input type="text" id="commandInput" autocomplete="off" placeholder="type a command..." />
       </div>
-      <div class="input-line hidden" id="passwordLine">
-        <span class="prompt">Password required:</span>
-        <input type="text" id="passwordInput" autocomplete="off" />
-      </div>
-      <div id="buttonContainer" class="center hidden">
-        <button onclick="window.open(resumeUrl,'_blank')">🌐 Open Resume</button>
-      </div>
     </div>
   </div>
 
-  <!-- Notepad Window (opens portfolio "files") -->
   <div class="notepad-window" id="notepadWindow">
     <div class="notepad-header" id="notepadHeader">
       <div class="window-controls">
         <div class="window-btn close" onclick="closeWindow('notepadWindow')"></div>
         <div class="window-btn minimize" onclick="minimizeWindow('notepadWindow')"></div>
-        <div class="window-btn maximize"></div>
+        <div class="window-btn maximize" onclick="maximizeWindow('notepadWindow')"></div>
       </div>
       <span class="notepad-title" id="notepadTitle">Text Editor</span>
     </div>
     <div class="notepad-content" id="notepadContent"></div>
   </div>
 
-  <!-- Taskbar with quick actions -->
   <div class="taskbar">
+    <div class="start-button" id="startButton" onclick="toggleStartMenu()">
+      <i class="fas fa-th"></i>
+      <span>Start</span>
+    </div>
+    
     <div class="taskbar-app" id="terminalTask" onclick="toggleWindow('terminalWindow','terminalTask')">🖥️ Terminal</div>
-
-    <!-- Quick-action: GitHub -->
     <div class="taskbar-app" id="githubBtn" title="Open GitHub (g)" onclick="window.open(githubUrl,'_blank')">🐙 GitHub</div>
-
-    <!-- Quick-action: Resume -->
     <div class="taskbar-app" id="resumeBtn" title="Open Resume (r)" onclick="window.open(resumeUrl,'_blank')">📄 Resume</div>
-
-    <!-- Quick-action: Arly.live -->
     <div class="taskbar-app" id="arlyliveBtn" title="Open arly.live" onclick="window.open(arlyLiveUrl,'_blank')">🌐 arly.live</div>
-
     <div class="taskbar-app hidden" id="notepadTask" onclick="toggleWindow('notepadWindow','notepadTask')">📝 Text Editor</div>
     <div class="taskbar-clock" id="clockBlock">
       <span id="clock">00:00</span>
     </div>
   </div>
 
+  <!-- Start Menu -->
+  <div class="start-menu" id="startMenu">
+    <div class="start-menu-header">
+      <div class="start-menu-user">Arly</div>
+      <div class="start-menu-subtitle">ArlyOS v2.0</div>
+    </div>
+    
+    <div style="font-size:.75rem;color:#7c3aed;font-weight:600;padding:8px 12px;margin-top:4px">APPLICATIONS</div>
+    <div class="start-menu-item" onclick="openTerminal();toggleStartMenu()">
+      <i class="fas fa-terminal"></i>
+      <span>Terminal</span>
+    </div>
+    <div class="start-menu-item" onclick="openFile('about.txt');toggleStartMenu()">
+      <i class="fas fa-user"></i>
+      <span>About</span>
+    </div>
+    <div class="start-menu-item" onclick="openFile('projects.txt');toggleStartMenu()">
+      <i class="fas fa-folder"></i>
+      <span>Projects</span>
+    </div>
+    <div class="start-menu-item" onclick="openFile('skills.txt');toggleStartMenu()">
+      <i class="fas fa-brain"></i>
+      <span>Skills</span>
+    </div>
+    <div class="start-menu-item" onclick="window.open(githubUrl,'_blank');toggleStartMenu()">
+      <i class="fab fa-github"></i>
+      <span>GitHub</span>
+    </div>
+    <div class="start-menu-item" onclick="window.open(resumeUrl,'_blank');toggleStartMenu()">
+      <i class="fas fa-file-pdf"></i>
+      <span>Resume</span>
+    </div>
+    
+    <div class="context-menu-divider"></div>
+    <div style="font-size:.75rem;color:#7c3aed;font-weight:600;padding:8px 12px">GAMES</div>
+    <div class="start-menu-item" onclick="openGame();toggleStartMenu()">
+      <i class="fas fa-times"></i>
+      <span>Tic Tac Toe</span>
+    </div>
+    <div class="start-menu-item" onclick="openSnakeGame();toggleStartMenu()">
+      <i class="fas fa-gamepad"></i>
+      <span>Snake</span>
+    </div>
+    
+    <div class="context-menu-divider"></div>
+    <div style="font-size:.75rem;color:#7c3aed;font-weight:600;padding:8px 12px">SYSTEM</div>
+    <div class="start-menu-item" onclick="openSettings();toggleStartMenu()">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div class="context-menu" id="contextMenu">
+    <div class="context-menu-item" onclick="refreshDesktop()">
+      <i class="fas fa-sync"></i>
+      <span>Refresh</span>
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" onclick="showCreateFileModal()">
+      <i class="fas fa-file-plus"></i>
+      <span>New File</span>
+    </div>
+    <div class="context-menu-item" onclick="showCreateFolderModal()">
+      <i class="fas fa-folder-plus"></i>
+      <span>New Folder</span>
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" onclick="viewStorageInfo()">
+      <i class="fas fa-info-circle"></i>
+      <span>Storage Info</span>
+    </div>
+    <div class="context-menu-item" onclick="resetSystem()">
+      <i class="fas fa-trash-restore"></i>
+      <span>Clear All & Reset</span>
+    </div>
+  </div>
+
+  <!-- Modal for creating files -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-title" id="modalTitle">Create New File</div>
+      <input type="text" class="modal-input" id="modalInput" placeholder="Enter name..." />
+      <div class="modal-buttons">
+        <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="handleModalSubmit()">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tic Tac Toe Game Window -->
+  <div class="game-window" id="gameWindow">
+    <div class="game-header" id="gameHeader">
+      <div class="window-controls">
+        <div class="window-btn close" onclick="closeGame()"></div>
+        <div class="window-btn minimize" onclick="minimizeWindow('gameWindow')"></div>
+        <div class="window-btn maximize"></div>
+      </div>
+      <span class="game-title">🎮 Tic Tac Toe</span>
+    </div>
+    <div class="game-content">
+      <div class="game-status" id="gameStatus">Your turn! (X)</div>
+      <div class="game-board" id="gameBoard">
+        <div class="game-cell" data-index="0" onclick="playerMove(0)"></div>
+        <div class="game-cell" data-index="1" onclick="playerMove(1)"></div>
+        <div class="game-cell" data-index="2" onclick="playerMove(2)"></div>
+        <div class="game-cell" data-index="3" onclick="playerMove(3)"></div>
+        <div class="game-cell" data-index="4" onclick="playerMove(4)"></div>
+        <div class="game-cell" data-index="5" onclick="playerMove(5)"></div>
+        <div class="game-cell" data-index="6" onclick="playerMove(6)"></div>
+        <div class="game-cell" data-index="7" onclick="playerMove(7)"></div>
+        <div class="game-cell" data-index="8" onclick="playerMove(8)"></div>
+      </div>
+      <div class="game-controls">
+        <button class="game-btn" onclick="resetGame()">New Game</button>
+        <button class="game-btn" onclick="closeGame()">Close</button>
+      </div>
+    </div>
+  </div>
+
 <script>
-/* -------------------------
-   Links & resume
-   ------------------------- */
 const resumeUrl = "https://docs.google.com/document/d/1hy8y0RUVLUmVKrILooMPO2WmgxPPMxGr8-Emu86uTKk/edit?usp=sharing";
 const githubUrl = "https://github.com/arlyone";
 const websiteUrl = "https://arly.one";
 const arlyLiveUrl = "https://arly.live";
 
-/* -------------------------
-   Files (HTML-friendly strings so links are clickable)
-   ------------------------- */
 const files = {
-  "about.txt": `Arun Bhandari — Pentester & Cybersecurity Researcher
+  "about.txt": `Arun Bhandari – Pentester & Cybersecurity Researcher
 
 Alias: Arly
 Location: Melbourne, Australia
@@ -198,22 +369,25 @@ About:
 Passionate cybersecurity researcher and penetration tester. Experienced in web application testing, server administration, network exploitation, cryptography, and digital forensics. Actively engaged in bug bounty platforms including HackerOne and Bugcrowd.
 
 Education:
-- Box Hill Institute — Bachelor of Computer Systems (2019–2023)
-- Everest Florida College — +2 Level (Science) (2017–2019)
+- Box Hill Institute – Bachelor of Computer Systems (2019–2023)
+- Everest Florida College – +2 Level (Science) (2017–2019)
 
-© 2025 Arun Bhandari
-`,
+© 2025 Arun Bhandari`,
 
   "projects.txt": `Featured Projects
-- Flipper — 'Jarvis-like' chatbot that performs security testing.
+
+- Flipper – 'Jarvis-like' chatbot that performs security testing.
   https://github.com/arlyone/Flipper
 
-- Lightc0der — Bug-bounty ready Kali tools with a one-click setup script
+- Lightc0der – Bug-bounty ready Kali tools with a one-click setup script
   https://github.com/arlyone/lightCoder
 
-- Operation Catnip — CTF-style interactive mystery.
+- Operation Catnip – CTF-style interactive mystery.
   https://arly.one/detective
-`,
+
+- ArlyOS – This interactive portfolio experience
+  
+View all projects: https://github.com/arlyone`,
 
   "skills.txt": `Technical Skills
 
@@ -235,30 +409,40 @@ Tools & Platforms:
 
 Systems & Cloud:
 - Linux / Windows Administration
-- AWS (EC2, S3, Lambda basics)
-`,
+- AWS (EC2, S3, Lambda basics)`,
 
-  "contact.txt": `Contact
+  "contact.txt": `Contact Information
 
 Email: itsarlyone@gmail.com
 Portfolio: https://arly.one
 GitHub: https://github.com/arlyone
 LinkedIn: https://www.linkedin.com/in/arlyone/
+Twitter: https://twitter.com/itsarlyone
+YouTube: https://www.youtube.com/@Arlyone
 
 Message:
-Feel free to reach out for collaboration, bug bounties, or CTFs.
-`
+Feel free to reach out for collaboration, bug bounties, or CTFs.`,
+
+  "achievements.txt": `Achievements & Recognition
+
+Bug Bounty:
+- 10+ vulnerabilities reported
+- 5+ recognitions from various organizations
+- Active on HackerOne and Bugcrowd
+
+Community:
+- 2k+ writeup views
+- CTF participant and creator
+- Security research contributor
+
+Certifications & Learning:
+- Continuous learning in cybersecurity
+- Hands-on penetration testing experience
+- Open-source tool developer`
 };
 
-/* -------------------------
-   Terminal & UI refs
-   ------------------------- */
 const output = document.getElementById('output');
 const input = document.getElementById('commandInput');
-const passwordInput = document.getElementById('passwordInput');
-const buttonContainer = document.getElementById('buttonContainer');
-const passwordLine = document.getElementById('passwordLine');
-const mainInputLine = document.getElementById('mainInputLine');
 const terminalWindow = document.getElementById('terminalWindow');
 const notepadWindow = document.getElementById('notepadWindow');
 const notepadTitle = document.getElementById('notepadTitle');
@@ -266,13 +450,48 @@ const notepadContent = document.getElementById('notepadContent');
 const terminalTask = document.getElementById('terminalTask');
 const notepadTask = document.getElementById('notepadTask');
 
-let awaitingPassword = false;
-let attemptsLeft = 3;
 let windowInitialized = false;
+let commandHistory = [];
+let historyIndex = -1;
+let isMaximized = false;
+let windowState = {};
+let modalAction = '';
+let userFiles = {};
 
-/* -------------------------
-   Clock only (no timer)
-   ------------------------- */
+// Tic Tac Toe Game State
+let gameBoard = ['', '', '', '', '', '', '', '', ''];
+let currentPlayer = 'X';
+let gameActive = true;
+let playerSymbol = 'X';
+let aiSymbol = 'O';
+
+const winConditions = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+  [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+  [0, 4, 8], [2, 4, 6]              // Diagonals
+];
+
+// Load user files from localStorage
+function loadUserFiles(){
+  const stored = localStorage.getItem('arlyos_files');
+  if(stored){
+    try{
+      userFiles = JSON.parse(stored);
+      Object.assign(files, userFiles);
+    }catch(e){
+      console.error('Error loading files:', e);
+    }
+  }
+}
+
+// Save user files to localStorage
+function saveUserFiles(){
+  localStorage.setItem('arlyos_files', JSON.stringify(userFiles));
+}
+
+// Initialize
+loadUserFiles();
+
 function updateClock(){
   const now = new Date();
   const hours = String(now.getHours()).padStart(2,'0');
@@ -281,9 +500,6 @@ function updateClock(){
 }
 setInterval(updateClock,1000); updateClock();
 
-/* -------------------------
-   Window management (preserve behaviors)
-   ------------------------- */
 function openTerminal(){
   terminalWindow.classList.add('show'); terminalWindow.classList.remove('minimized'); terminalTask.classList.add('active');
   if(!windowInitialized){ terminalWindow.style.left='50%'; terminalWindow.style.top='50%'; terminalWindow.style.transform='translate(-50%,-50%)'; windowInitialized=true; }
@@ -291,12 +507,11 @@ function openTerminal(){
 }
 
 function openFile(filename){
-  if(!files[filename]){ openTerminal(); setTimeout(()=>print(`⚠️ ${filename} not found.`,"#f2a6a6"),100); return; }
-  notepadTitle.textContent=`Text Editor — ${filename}`;
-  // use innerHTML so anchors are clickable
+  if(!files[filename]){ openTerminal(); setTimeout(()=>print(`⚠️ ${filename} not found.`,"error"),100); return; }
+  notepadTitle.textContent=`Text Editor – ${filename}`;
   notepadContent.innerHTML=files[filename];
   notepadWindow.classList.add('show'); notepadWindow.classList.remove('minimized'); notepadTask.classList.remove('hidden'); notepadTask.classList.add('active');
-  if(!notepadWindow.style.left){ notepadWindow.style.left='100px'; notepadWindow.style.top='80px'; }
+  if(!notepadWindow.style.left){ notepadWindow.style.left='120px'; notepadWindow.style.top='100px'; }
 }
 
 function toggleWindow(windowId, taskId){
@@ -310,118 +525,599 @@ function minimizeWindow(windowId){
   const win=document.getElementById(windowId);
   const taskId = windowId==='terminalWindow' ? 'terminalTask' : 'notepadTask';
   const task=document.getElementById(taskId);
-  win.classList.add('minimized'); win.classList.remove('show'); task.classList.remove('active');
+  win.classList.add('minimized'); 
+  win.classList.remove('show'); 
+  task.classList.remove('active');
+}
+
+function maximizeWindow(windowId){
+  const win=document.getElementById(windowId);
+  
+  if(!windowState[windowId]){
+    windowState[windowId] = {
+      left: win.style.left,
+      top: win.style.top,
+      width: win.style.width,
+      height: win.style.height,
+      transform: win.style.transform
+    };
+  }
+  
+  if(win.classList.contains('maximized')){
+    // Restore
+    win.style.left = windowState[windowId].left;
+    win.style.top = windowState[windowId].top;
+    win.style.width = windowState[windowId].width;
+    win.style.height = windowState[windowId].height;
+    win.style.transform = windowState[windowId].transform;
+    win.classList.remove('maximized');
+  } else {
+    // Maximize
+    win.style.left = '0';
+    win.style.top = '0';
+    win.style.width = '100vw';
+    win.style.height = 'calc(100vh - 50px)';
+    win.style.transform = 'none';
+    win.classList.add('maximized');
+  }
 }
 
 function closeWindow(windowId){
   const win=document.getElementById(windowId);
   const taskId = windowId==='terminalWindow' ? 'terminalTask' : 'notepadTask';
   const task=document.getElementById(taskId);
-  win.classList.remove('show'); win.classList.add('minimized'); task.classList.remove('active');
+  win.classList.remove('show'); 
+  win.classList.add('minimized'); 
+  task.classList.remove('active');
   if(windowId==='notepadWindow') task.classList.add('hidden');
 }
 
-/* -------------------------
-   Draggable windows
-   ------------------------- */
 function makeDraggable(windowEl, headerEl){
-  let isDragging=false, currentX, currentY, initialX, initialY;
-  headerEl.addEventListener('mousedown',(e)=>{ if(e.target.classList.contains('window-btn')) return; const rect=windowEl.getBoundingClientRect(); initialX=e.clientX-rect.left; initialY=e.clientY-rect.top; isDragging=true; windowEl.style.transform='none'; });
-  document.addEventListener('mousemove',(e)=>{ if(isDragging){ e.preventDefault(); currentX=e.clientX-initialX; currentY=e.clientY-initialY; windowEl.style.left=currentX+'px'; windowEl.style.top=currentY+'px'; }});
-  document.addEventListener('mouseup',()=>{ isDragging=false; });
+  let isDragging=false, offsetX, offsetY;
+  
+  headerEl.addEventListener('mousedown',(e)=>{ 
+    if(e.target.classList.contains('window-btn')) return;
+    if(windowEl.classList.contains('maximized')) return;
+    
+    isDragging=true;
+    const rect = windowEl.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    
+    windowEl.style.transition = 'none';
+    headerEl.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+  
+  document.addEventListener('mousemove',(e)=>{ 
+    if(isDragging){ 
+      e.preventDefault();
+      const newX = e.clientX - offsetX;
+      const newY = e.clientY - offsetY;
+      
+      windowEl.style.left = newX + 'px';
+      windowEl.style.top = newY + 'px';
+      windowEl.style.transform = 'none';
+    }
+  });
+  
+  document.addEventListener('mouseup',()=>{ 
+    if(isDragging){
+      isDragging = false;
+      windowEl.style.transition = '';
+      headerEl.style.cursor = 'move';
+    }
+  });
 }
 makeDraggable(terminalWindow, document.getElementById('terminalHeader'));
 makeDraggable(notepadWindow, document.getElementById('notepadHeader'));
+makeDraggable(document.getElementById('gameWindow'), document.getElementById('gameHeader'));
 
-/* -------------------------
-   Print helper
-   ------------------------- */
-function print(text,color="#dbeefd",delay=0){
-  return new Promise(res=>{ setTimeout(()=>{ const line=document.createElement('div'); line.className='output'; line.style.color=color; line.textContent=text; output.appendChild(line); const terminalBody=document.querySelector('.terminal-body'); terminalBody.scrollTop = terminalBody.scrollHeight; res(); },delay); });
+// Tic Tac Toe Game Functions
+function openGame(){
+  const gameWindow = document.getElementById('gameWindow');
+  gameWindow.classList.add('show');
+  if(!gameWindow.style.left){
+    gameWindow.style.left = '50%';
+    gameWindow.style.top = '50%';
+    gameWindow.style.transform = 'translate(-50%, -50%)';
+  }
+  resetGame();
 }
 
-/* -------------------------
-   Boot sequence (portfolio-themed) - no "agent" wording
-   ------------------------- */
+function closeGame(){
+  document.getElementById('gameWindow').classList.remove('show');
+}
+
+function resetGame(){
+  gameBoard = ['', '', '', '', '', '', '', '', ''];
+  currentPlayer = 'X';
+  gameActive = true;
+  document.getElementById('gameStatus').textContent = 'Your turn! (X)';
+  
+  const cells = document.querySelectorAll('.game-cell');
+  cells.forEach(cell => {
+    cell.textContent = '';
+    cell.classList.remove('taken', 'x', 'o');
+  });
+}
+
+function playerMove(index){
+  if(!gameActive || gameBoard[index] !== '') return;
+  
+  makeMove(index, playerSymbol);
+  
+  if(!gameActive) return;
+  
+  // AI makes a move after a short delay
+  setTimeout(() => {
+    if(gameActive){
+      aiMove();
+    }
+  }, 500);
+}
+
+function makeMove(index, symbol){
+  gameBoard[index] = symbol;
+  const cell = document.querySelector(`[data-index="${index}"]`);
+  cell.textContent = symbol;
+  cell.classList.add('taken', symbol.toLowerCase());
+  
+  checkWinner();
+}
+
+function aiMove(){
+  // Simple AI: Try to win, block player, or random move
+  let move = findWinningMove(aiSymbol);
+  if(move === -1) move = findWinningMove(playerSymbol); // Block player
+  if(move === -1) move = getRandomMove();
+  
+  if(move !== -1){
+    makeMove(move, aiSymbol);
+  }
+}
+
+function findWinningMove(symbol){
+  for(let condition of winConditions){
+    const [a, b, c] = condition;
+    const line = [gameBoard[a], gameBoard[b], gameBoard[c]];
+    
+    if(line.filter(cell => cell === symbol).length === 2 && line.includes('')){
+      if(gameBoard[a] === '') return a;
+      if(gameBoard[b] === '') return b;
+      if(gameBoard[c] === '') return c;
+    }
+  }
+  return -1;
+}
+
+function getRandomMove(){
+  const available = gameBoard.map((cell, index) => cell === '' ? index : null).filter(i => i !== null);
+  if(available.length === 0) return -1;
+  return available[Math.floor(Math.random() * available.length)];
+}
+
+function checkWinner(){
+  let roundWon = false;
+  
+  for(let condition of winConditions){
+    const [a, b, c] = condition;
+    if(gameBoard[a] === '' || gameBoard[b] === '' || gameBoard[c] === '') continue;
+    if(gameBoard[a] === gameBoard[b] && gameBoard[b] === gameBoard[c]){
+      roundWon = true;
+      break;
+    }
+  }
+  
+  if(roundWon){
+    const winner = currentPlayer === 'X' ? 'You win! 🎉' : 'AI wins! 🤖';
+    document.getElementById('gameStatus').textContent = winner;
+    gameActive = false;
+    return;
+  }
+  
+  if(!gameBoard.includes('')){
+    document.getElementById('gameStatus').textContent = "It's a draw! 🤝";
+    gameActive = false;
+    return;
+  }
+  
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  const turn = currentPlayer === 'X' ? 'Your turn! (X)' : 'AI thinking... (O)';
+  document.getElementById('gameStatus').textContent = turn;
+}
+
+// Start Menu
+function toggleStartMenu(){
+  const startMenu = document.getElementById('startMenu');
+  startMenu.classList.toggle('show');
+}
+
+// Context Menu
+document.addEventListener('contextmenu', (e) => {
+  if(e.target.closest('.terminal-window') || e.target.closest('.notepad-window') || 
+     e.target.closest('.taskbar') || e.target.closest('.context-menu')) {
+    return;
+  }
+  e.preventDefault();
+  const contextMenu = document.getElementById('contextMenu');
+  contextMenu.style.left = e.pageX + 'px';
+  contextMenu.style.top = e.pageY + 'px';
+  contextMenu.classList.add('show');
+});
+
+document.addEventListener('click', (e) => {
+  const contextMenu = document.getElementById('contextMenu');
+  const startMenu = document.getElementById('startMenu');
+  
+  if(!e.target.closest('.context-menu')){
+    contextMenu.classList.remove('show');
+  }
+  if(!e.target.closest('.start-menu') && !e.target.closest('.start-button')){
+    startMenu.classList.remove('show');
+  }
+});
+
+// Modal functions
+function showCreateFileModal(){
+  modalAction = 'file';
+  document.getElementById('modalTitle').textContent = 'Create New File';
+  document.getElementById('modalInput').placeholder = 'filename.txt';
+  document.getElementById('modalInput').value = '';
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('contextMenu').classList.remove('show');
+  document.getElementById('modalInput').focus();
+}
+
+function showCreateFolderModal(){
+  modalAction = 'folder';
+  document.getElementById('modalTitle').textContent = 'Create New Folder';
+  document.getElementById('modalInput').placeholder = 'folder name';
+  document.getElementById('modalInput').value = '';
+  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById('contextMenu').classList.remove('show');
+  document.getElementById('modalInput').focus();
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+  modalAction = '';
+}
+
+function handleModalSubmit(){
+  const input = document.getElementById('modalInput').value.trim();
+  if(!input){
+    alert('Please enter a name');
+    return;
+  }
+  
+  if(modalAction === 'file'){
+    createFile(input);
+  } else if(modalAction === 'folder'){
+    createFolder(input);
+  }
+  
+  closeModal();
+}
+
+// File operations
+function createFile(filename){
+  if(!filename.includes('.')){
+    filename += '.txt';
+  }
+  
+  if(files[filename]){
+    alert(`File "${filename}" already exists!`);
+    return;
+  }
+  
+  const content = `New file created on ${new Date().toLocaleString()}\n\nEdit this file by opening it.`;
+  userFiles[filename] = content;
+  files[filename] = content;
+  saveUserFiles();
+  
+  // Add to desktop
+  addDesktopIcon(filename, '📝');
+  
+  openTerminal();
+  setTimeout(() => print(`✅ Created file: ${filename}`, "success"), 100);
+}
+
+function createFolder(foldername){
+  const folderKey = `${foldername}/`;
+  if(files[folderKey]){
+    alert(`Folder "${foldername}" already exists!`);
+    return;
+  }
+  
+  userFiles[folderKey] = `Folder: ${foldername}`;
+  files[folderKey] = `Folder: ${foldername}`;
+  saveUserFiles();
+  
+  addDesktopIcon(folderKey, '📁');
+  
+  openTerminal();
+  setTimeout(() => print(`✅ Created folder: ${foldername}`, "success"), 100);
+}
+
+function addDesktopIcon(name, icon){
+  const desktop = document.getElementById('desktop');
+  const iconDiv = document.createElement('div');
+  iconDiv.className = 'desktop-icon';
+  iconDiv.onclick = () => openFile(name);
+  iconDiv.innerHTML = `
+    <div class="icon-image">${icon}</div>
+    <div class="icon-label">${name}</div>
+  `;
+  desktop.appendChild(iconDiv);
+}
+
+function refreshDesktop(){
+  document.getElementById('contextMenu').classList.remove('show');
+  openTerminal();
+  setTimeout(() => print('🔄 Desktop refreshed', "success"), 100);
+}
+
+function viewStorageInfo(){
+  document.getElementById('contextMenu').classList.remove('show');
+  openTerminal();
+  const userFileCount = Object.keys(userFiles).length;
+  setTimeout(() => {
+    print('\n📊 STORAGE INFORMATION', "command-category");
+    print(`  Total files: ${Object.keys(files).length}`, "system-info");
+    print(`  User-created files: ${userFileCount}`, "system-info");
+    print(`  System files: ${Object.keys(files).length - userFileCount}`, "system-info");
+    print(`  Storage: localStorage`, "system-info");
+  }, 100);
+}
+
+function resetSystem(){
+  if(confirm('⚠️  This will delete all custom files and reset the system. Continue?')){
+    localStorage.removeItem('arlyos_files');
+    alert('✅ System reset! Refreshing...');
+    location.reload();
+  }
+}
+
+function print(text,type="normal",delay=0){
+  return new Promise(res=>{ 
+    setTimeout(()=>{ 
+      const line=document.createElement('div'); 
+      line.className=`output ${type}`; 
+      line.textContent=text; 
+      output.appendChild(line); 
+      const terminalBody=document.querySelector('.terminal-body'); 
+      terminalBody.scrollTop = terminalBody.scrollHeight; 
+      res(); 
+    },delay); 
+  });
+}
+
 async function boot(){
-  await print("Booting ArlyOS v1.0...","#caa8ff",300);
-  await print("Initializing portfolio modules...","#7ef29b",400);
-  await print("Loading projects & highlights...","#7ef29b",300);
-  await print("Connection established. Welcome to ArlyOS.","#7ef29b",300);
-  await print("Type 'help' for available commands.","#86a7bf",300);
+  const ascii = `
+    ___       __    ____  ____  ____  
+   / _ |  ___/ /__ / / / / / / / __ \\ 
+  / __ | / __/ / // / /_/ / /_/ / /_/ /
+ /_/ |_|/_/ /_/\\_, /\\____/\\____/\\____/  
+              /___/                    `;
+  await print(ascii,"ascii-art",200);
+  await print("ArlyOS v2.0 – Quantum Edition","success",300);
+  await print("═══════════════════════════════════════","info",200);
+  await print("⚡ Initializing portfolio modules...","system-info",300);
+  await print("✓ Security protocols loaded","success",200);
+  await print("✓ Project database synchronized","success",200);
+  await print("✓ Neural network online","success",200);
+  await print("═══════════════════════════════════════","info",200);
+  await print("Welcome to the Arlyverse. Type 'help' to begin.","success",300);
 }
 
-/* -------------------------
-   Terminal command handling (portfolio commands)
-   ------------------------- */
-input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ const cmd=input.value.trim(); input.value=''; handleCommand(cmd); }});
-passwordInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ const pass=passwordInput.value.trim(); passwordInput.value=''; handlePassword(pass); }});
+input.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ 
+    const cmd=input.value.trim(); 
+    input.value=''; 
+    if(cmd) {
+      commandHistory.push(cmd);
+      historyIndex = commandHistory.length;
+    }
+    handleCommand(cmd); 
+  }
+  else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    if(historyIndex > 0){
+      historyIndex--;
+      input.value = commandHistory[historyIndex];
+    }
+  }
+  else if(e.key==='ArrowDown'){
+    e.preventDefault();
+    if(historyIndex < commandHistory.length - 1){
+      historyIndex++;
+      input.value = commandHistory[historyIndex];
+    } else {
+      historyIndex = commandHistory.length;
+      input.value = '';
+    }
+  }
+});
 
 function handleCommand(cmd){
   if(!cmd) return;
-  print(`arly@arlyone:~$ ${cmd}`,"#7ef29b");
-  const parts=cmd.split(' '); const command=parts[0].toLowerCase(); const arg=parts.slice(1).join(' ').toLowerCase();
+  print(`arly@arlyone:~$ ${cmd}`,"success");
+  const parts=cmd.split(' '); 
+  const command=parts[0].toLowerCase(); 
+  const arg=parts.slice(1).join(' ');
 
   switch(command){
     case "help":
-      print("Commands:\n- list / ls ..... view directory\n- cat [file] .... open file in editor (e.g. cat about.txt)\n- whoami .... show short bio\n- projects .. list projects\n- skills .... show skills summary\n- contact .... show contact info\n- github .... open GitHub\n- resume .... open resume\n- clear .... clear terminal output","#86a7bf");
+      print("\n╔════════════════════════════════════════╗","command-category");
+      print("║          ARLYOS COMMAND SUITE          ║","command-category");
+      print("╚════════════════════════════════════════╝\n","command-category");
+      
+      print("📁 FILE SYSTEM","command-category");
+      print("  ls, list .......... view directory","command-item");
+      print("  cat [file] ........ open file in editor","command-item");
+      print("  tree .............. show file tree","command-item");
+      
+      print("\n👤 INFORMATION","command-category");
+      print("  whoami ............ display identity","command-item");
+      print("  about ............. about Arly","command-item");
+      print("  skills ............ technical skills","command-item");
+      print("  projects .......... featured projects","command-item");
+      print("  achievements ...... accomplishments","command-item");
+      print("  contact ........... contact info","command-item");
+      
+      print("\n🔗 QUICK LINKS","command-category");
+      print("  github ............ open GitHub","command-item");
+      print("  resume ............ open resume","command-item");
+      print("  website ........... open portfolio","command-item");
+      print("  arlylive .......... visit arly.live","command-item");
+      
+      print("\n⚙️  SYSTEM","command-category");
+      print("  sysinfo ........... system information","command-item");
+      print("  history ........... command history","command-item");
+      print("  clear ............. clear terminal","command-item");
+      print("  banner ............ show ASCII banner","command-item");
+      print("  date .............. show date/time","command-item");
+      print("  echo [text] ....... print text","command-item");
+      
+      print("\n💡 Tip: Use arrow keys to navigate command history","info");
       break;
 
     case "whoami":
-      print("Arun Bhandari (alias: Arly) — Pentester & Cybersecurity Researcher. Based in Melbourne, Australia.","#7ef29b");
+      print("Arun Bhandari (Arly)","success");
+      print("Pentester | Security Researcher | Developer","system-info");
+      print("Location: Melbourne, Australia 🇦🇺","system-info");
+      break;
+
+    case "about":
+      openFile('about.txt');
+      print("📄 Opening about.txt...","success");
       break;
 
     case "projects":
-      print("Featured projects: Flipper, LightCoder, Arly's Detective Hunt. Use 'cat projects.txt' or click the projects icon.","#9fb3c8");
+      openFile('projects.txt');
+      print("📁 Opening projects.txt...","success");
       break;
 
     case "skills":
-      print("Skills: Python, Bash, JS, Web pentesting, network recon, forensics. Use 'cat skills.txt' or click icon.","#9fb3c8");
+      openFile('skills.txt');
+      print("🧠 Opening skills.txt...","success");
+      break;
+
+    case "achievements":
+      openFile('achievements.txt');
+      print("🏆 Opening achievements.txt...","success");
       break;
 
     case "contact":
-      print("Contact info available. Use 'cat contact.txt' or click the contact icon.","#9fb3c8");
+      openFile('contact.txt');
+      print("✉️ Opening contact.txt...","success");
       break;
 
     case "github":
-      window.open(githubUrl,"_blank"); print("Opening GitHub...","#9fb3c8");
+      window.open(githubUrl,"_blank"); 
+      print("🐙 Launching GitHub profile...","success");
       break;
 
     case "resume":
-      window.open(resumeUrl,"_blank"); print("Opening Resume...","#9fb3c8");
+      window.open(resumeUrl,"_blank"); 
+      print("📄 Opening resume...","success");
+      break;
+
+    case "website":
+      window.open(websiteUrl,"_blank");
+      print("🌐 Launching portfolio website...","success");
+      break;
+
+    case "arlylive":
+      window.open(arlyLiveUrl,"_blank");
+      print("🌐 Opening arly.live...","success");
       break;
 
     case "list":
     case "ls":
-      print("Directory:\n- about.txt\n- projects.txt\n- skills.txt\n- contact.txt","#9fb3c8");
+      const fileList = Object.keys(files);
+      print("\n📁 DIRECTORY LISTING","command-category");
+      fileList.forEach(f => {
+        const icon = f.endsWith('/') ? '📁' : '📄';
+        const isUserFile = userFiles[f] ? ' 👤' : '';
+        print(`  ${icon} ${f}${isUserFile}`,"command-item");
+      });
+      print(`\n${fileList.length} files listed`,"system-info");
+      break;
+
+    case "tree":
+      print("\n/home/arly/","command-category");
+      print("├── 📄 about.txt","command-item");
+      print("├── 📁 projects.txt","command-item");
+      print("├── 🧠 skills.txt","command-item");
+      print("├── ✉️ contact.txt","command-item");
+      print("└── 🏆 achievements.txt","command-item");
       break;
 
     case "cat":
-      if(!arg){ print("Usage: cat [filename]","#f2a6a6"); break; }
-      const filename = arg;
-      if(files[filename]){ openFile(filename); print(`📄 Opening ${filename} in text editor...`,"#7ef29b"); }
-      else{ print(`cat: ${filename}: No such file or directory`,"#f2a6a6"); }
+      if(!arg){ print("Usage: cat [filename]","error"); break; }
+      const filename = arg.toLowerCase();
+      if(files[filename]){ 
+        openFile(filename); 
+        print(`📄 Opening ${filename}...`,"success"); 
+      }
+      else{ print(`cat: ${filename}: No such file or directory`,"error"); }
+      break;
+
+    case "sysinfo":
+      print("\n╔════════════════════════════════════════╗","command-category");
+      print("║         SYSTEM INFORMATION             ║","command-category");
+      print("╚════════════════════════════════════════╝\n","command-category");
+      print("OS: ArlyOS v2.0 Quantum","system-info");
+      print("Kernel: Linux 5.15.0-arly","system-info");
+      print("Shell: bash 5.1.0","system-info");
+      print("User: arly@arlyone","system-info");
+      print("Uptime: " + new Date().toLocaleString(),"system-info");
+      print("Theme: Cyberpunk Purple","system-info");
+      break;
+
+    case "history":
+      if(commandHistory.length === 0){
+        print("No commands in history","system-info");
+      } else {
+        print("\n📜 COMMAND HISTORY","command-category");
+        commandHistory.forEach((cmd, i) => {
+          print(`  ${i+1}  ${cmd}`,"command-item");
+        });
+      }
+      break;
+
+    case "date":
+      print(new Date().toLocaleString(),"success");
+      break;
+
+    case "echo":
+      print(arg || "","system-info");
+      break;
+
+    case "banner":
+      const banner = `
+    ___       __    ____  ____  ____  
+   / _ |  ___/ /__ / / / / / / / __ \\ 
+  / __ | / __/ / // / /_/ / /_/ / /_/ /
+ /_/ |_|/_/ /_/\\_, /\\____/\\____/\\____/  
+              /___/                    `;
+      print(banner,"ascii-art");
+      print("ArlyOS v2.0 – Quantum Edition","success");
       break;
 
     case "clear":
-      output.innerHTML = ""; print("Session reset.","#9fb3c8"); break;
+      output.innerHTML = ""; 
+      print("Terminal cleared.","success"); 
+      break;
 
     default:
-      print(`bash: ${cmd}: command not found`,"#f2a6a6");
+      print(`bash: ${command}: command not found`,"error");
+      print("Type 'help' for available commands","info");
   }
 }
 
-/* -------------------------
-   Password handling: not used for portfolio
-   ------------------------- */
-function handlePassword(pass){
-  print("🔐 Password handling is not used in portfolio mode.","#86a7bf");
-}
-
-/* -------------------------
-   Keyboard shortcuts
-   a = about, p = projects, s = skills, c = contact, g = github, r = resume, ? = help overlay
-   ------------------------- */
 document.addEventListener('keydown',(e)=>{
   const active = document.activeElement;
   const typing = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
@@ -435,20 +1131,30 @@ document.addEventListener('keydown',(e)=>{
   else if(e.key === 'r') { window.open(resumeUrl,'_blank'); }
   else if(e.key === '?') {
     openTerminal();
-    print("Shortcuts:\n a = About\n p = Projects\n s = Skills\n c = Contact\n g = GitHub\n r = Resume\n ? = this help", "#86a7bf");
+    print("⌨️  KEYBOARD SHORTCUTS","command-category");
+    print("  a = About","command-item");
+    print("  p = Projects","command-item");
+    print("  s = Skills","command-item");
+    print("  c = Contact","command-item");
+    print("  g = GitHub","command-item");
+    print("  r = Resume","command-item");
+    print("  ? = This help","command-item");
   }
 });
 
-/* -------------------------
-   Extra UX: double-click taskbar quick actions
-   ------------------------- */
 document.getElementById('githubBtn').addEventListener('dblclick', ()=>window.open(githubUrl,'_blank'));
 document.getElementById('resumeBtn').addEventListener('dblclick', ()=>window.open(resumeUrl,'_blank'));
 document.getElementById('arlyliveBtn').addEventListener('dblclick', ()=>window.open(arlyLiveUrl,'_blank'));
 
-/* -------------------------
-   Boot & initial open (preserve timing but portfolio-themed)
-   ------------------------- */
+// Add enter key support for modal
+document.getElementById('modalInput').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter'){
+    handleModalSubmit();
+  } else if(e.key === 'Escape'){
+    closeModal();
+  }
+});
+
 setTimeout(()=>openTerminal(),500);
 setTimeout(()=>boot(),600);
 </script>
